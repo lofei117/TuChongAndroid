@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TuChong</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="test_string">在这个随波逐流的世界里。我一直想要做到不忘初心。我原本以为我还是原来的我。并没有变。直到今天我看了淘宝9.9包邮的衣服竟然已经下不去手。今天6.18。为什么还是9.9？？？？？</string>
+</resources>
