@@ -18,4 +18,36 @@ public class TCActivity {
     private List<Long> site_id_array;
 
     private TCPost post;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(final String created_at) {
+        this.created_at = created_at;
+    }
+
+    public List<Long> getSite_id_array() {
+        return site_id_array;
+    }
+
+    public void setSite_id_array(final List<Long> site_id_array) {
+        this.site_id_array = site_id_array;
+    }
+
+    public TCPost getPost() {
+        return post;
+    }
+
+    public void setPost(final TCPost post) {
+        this.post = post;
+    }
 }

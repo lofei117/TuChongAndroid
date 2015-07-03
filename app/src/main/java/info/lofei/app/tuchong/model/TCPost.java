@@ -1,7 +1,5 @@
 package info.lofei.app.tuchong.model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
@@ -25,7 +23,7 @@ public class TCPost {
 
     private String published_at;
 
-    private long excerpt;
+    private String excerpt;
 
     private int favorites;
 
@@ -87,11 +85,11 @@ public class TCPost {
         this.published_at = published_at;
     }
 
-    public long getExcerpt() {
+    public String getExcerpt() {
         return excerpt;
     }
 
-    public void setExcerpt(final long excerpt) {
+    public void setExcerpt(final String excerpt) {
         this.excerpt = excerpt;
     }
 

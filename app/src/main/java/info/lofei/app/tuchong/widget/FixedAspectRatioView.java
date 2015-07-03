@@ -3,13 +3,14 @@ package info.lofei.app.tuchong.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import info.lofei.app.tuchong.R;
 
 
 /**
- * TODO comment here.
+ * Fixed Aspect Ratio View.
  *
  * @author lofei lofei@lofei.info
  * @version 1.0.0
@@ -17,10 +18,14 @@ import info.lofei.app.tuchong.R;
  */
 public class FixedAspectRatioView extends FrameLayout {
 
+    private static final int FIXED_WIDTH = 0;
+    private static final int FIXED_HEIGHT = 1;
+
     private int mAspectRatioWidth = 0;
 
     private int mAspectRatioHeight = 0;
 
+    private int mFixedAspect;
 
     public FixedAspectRatioView(Context context) {
         super(context);
@@ -42,6 +47,8 @@ public class FixedAspectRatioView extends FrameLayout {
         mAspectRatioWidth = a.getInt(R.styleable.FixedAspectRatioView_aspectRatioWidth, 0);
         mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioView_aspectRatioHeight, 0);
 
+        mFixedAspect = a.getInt(R.styleable.FixedAspectRatioView_fixedAspect, FIXED_WIDTH);
+
         a.recycle();
     }
 
@@ -58,14 +65,13 @@ public class FixedAspectRatioView extends FrameLayout {
 
             int finalWidth, finalHeight;
 
-            if (calculatedHeight > originalHeight) {
-                finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
-                finalHeight = originalHeight;
-            } else {
+            if (mFixedAspect == FIXED_WIDTH) {
                 finalWidth = originalWidth;
                 finalHeight = calculatedHeight;
+            } else {
+                finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
+                finalHeight = originalHeight;
             }
-
             super.onMeasure(
                     MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));

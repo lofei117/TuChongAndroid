@@ -4,5 +4,9 @@
     <declare-styleable name="FixedAspectRatioView">
         <attr name="aspectRatioWidth" format="integer" />
         <attr name="aspectRatioHeight" format="integer" />
+        <attr name="fixedAspect" format="enum">
+            <enum name="width" value="0"/>
+            <enum name="height" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
