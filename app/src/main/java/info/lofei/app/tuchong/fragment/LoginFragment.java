@@ -2,7 +2,6 @@ package info.lofei.app.tuchong.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,11 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
-import info.lofei.app.tuchong.data.LoginRequest;
+import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.util.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -36,10 +35,10 @@ public class LoginFragment extends BaseFragment {
     private static final String USERNAME_KEY = "account";
     private static final String PASSWORD_KEY = "password";
 
-    @InjectView(R.id.et_username)
+    @Bind(R.id.et_username)
     EditText mUserNameEditText;
 
-    @InjectView(R.id.et_password)
+    @Bind(R.id.et_password)
     EditText mPasswordEditText;
 
     private MainActivity mMainActivity;
@@ -62,8 +61,8 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, null);
-        ButterKnife.inject(this, view);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -74,7 +73,7 @@ public class LoginFragment extends BaseFragment {
 
         String encodedPassword = new RSA().encrypt(originalPassword);
 
-        HashMap params = new HashMap(8);
+        HashMap<String, String> params = new HashMap<>(8);
         params.put(USERNAME_KEY, username);
         params.put(PASSWORD_KEY, encodedPassword);
         params.put("remember", "on");

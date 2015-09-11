@@ -18,4 +18,6 @@ public class Constant {
     public static final String RESULT_KEY = "result";
     public static final String RESULT_SUCCESS = "SUCCESS";
     public static final String RESULT_FAILED = "ERROR";
+
+    public static final int PAGE_COUNT = 20;
 }

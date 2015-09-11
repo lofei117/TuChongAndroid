@@ -18,32 +18,34 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_activity"
             android:icon="@drawable/ic_dashboard"
-            android:title="Home" />
+            android:title="@string/category_activity"/>
         <item
-            android:id="@+id/nav_messages"
+            android:id="@+id/nav_portrait"
             android:icon="@drawable/ic_event"
-            android:title="Messages" />
+            android:title="@string/category_portrait"/>
         <item
-            android:id="@+id/nav_friends"
+            android:id="@+id/nav_humanities"
             android:icon="@drawable/ic_headset"
-            android:title="Friends" />
+            android:title="@string/category_humanities"/>
         <item
-            android:id="@+id/nav_discussion"
+            android:id="@+id/nav_scenery"
             android:icon="@drawable/ic_forum"
-            android:title="Discussion" />
+            android:title="@string/category_scenery"/>
+        <item
+            android:id="@+id/nav_documentary"
+            android:icon="@drawable/ic_forum"
+            android:title="@string/category_documentary"/>
+        <item
+            android:id="@+id/nav_still_life"
+            android:icon="@drawable/ic_forum"
+            android:title="@string/category_still_life"/>
+        <item
+            android:id="@+id/nav_journey"
+            android:icon="@drawable/ic_forum"
+            android:title="@string/category_journey"/>
     </group>
 
-    <item android:title="Sub items">
-        <menu>
-            <item
-                android:icon="@drawable/ic_dashboard"
-                android:title="Sub item 1" />
-            <item
-                android:icon="@drawable/ic_forum"
-                android:title="Sub item 2" />
-        </menu>
-    </item>
 
 </menu>

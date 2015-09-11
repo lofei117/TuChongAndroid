@@ -1,7 +1,6 @@
-package info.lofei.app.tuchong.data;
+package info.lofei.app.tuchong.data.request;
 
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -10,7 +9,6 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import info.lofei.app.tuchong.util.Constant;
-import info.lofei.app.tuchong.util.PreferenceUtil;
 
 /**
  * BaseRequest, 统一处理cookie和登录相关事宜.

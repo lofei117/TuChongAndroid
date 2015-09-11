@@ -1,5 +1,10 @@
 package info.lofei.app.tuchong.model;
 
+import android.support.annotation.StringDef;
+
+import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -9,7 +14,14 @@ import java.util.List;
  * @version 1.0.0
  *          created at: 2015-06-22 20:12
  */
-public class TCPost {
+public class TCPost implements Serializable {
+
+//    @Retention(RetentionPolicy.SOURCE)
+//    @StringDef({TEXT, MULTI_PHOTO})
+//    public @interface Type{}
+
+    public static final String TEXT = "text";
+    public static final String MULTI_PHOTO = "multi-photo";
 
     private long post_id;
 

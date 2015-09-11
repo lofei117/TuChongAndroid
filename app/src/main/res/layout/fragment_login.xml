@@ -24,7 +24,6 @@
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:text="爷爷泡的乌龙茶"
             android:singleLine="true"/>
 
         <EditText
@@ -37,7 +36,6 @@
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:text="llflll"
             android:singleLine="true"/>
 
         <Button
