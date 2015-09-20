@@ -27,18 +27,31 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
-    <style name="Widget.CardView" parent="android:Widget">
+
+    <style name="Widget" />
+
+    <style name="Widget.CardView">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="Widget.CardContent" parent="android:Widget">
+    <style name="Widget.CardContent">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">24dp</item>
         <item name="android:paddingBottom">24dp</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Widget.Wizard" />
+
+    <style name="Widget.Wizard.Title">
+        <item name="android:textColor">#444444</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">15dp</item>
     </style>
 
     <style name="TextAppearance.NotificationHeader" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">

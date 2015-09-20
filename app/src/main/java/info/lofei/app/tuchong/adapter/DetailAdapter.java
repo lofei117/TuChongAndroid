@@ -124,7 +124,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
         @Override
         void bindData(final int position) {
-            title.setText(mPost.getTitle());
+            if (mPost.getTitle().isEmpty()) {
+                title.setVisibility(View.GONE);
+            } else if (mPost.getExcerpt().isEmpty()){
+                excerpt.setVisibility(View.GONE);
+                title.setText(mPost.getTitle());
+            }
             excerpt.setText(mPost.getExcerpt());
         }
     }
