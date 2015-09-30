@@ -16,6 +16,10 @@ gen/
 .gradle/
 build/
 /*/build/
+gradle/
+gradlew.bat
+gradlew
+gradle.properties
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -29,3 +33,7 @@ proguard/
 # IDE Files
 .idea/
 *.iml
+
+# mac .DS_Store 
+.DS_Store
+
