@@ -24,12 +24,16 @@ public class TuChongApi {
 
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
 
-//    public static final String COMMENT_URL = BASE_URL + "comment/get/?post_id=%1$d&type=comment";
+    public static final String COMMENT_URL = BASE_URL + "/posts/%1$d/comments?type=comment";
+
+    public static final String CATEGORY_URL = BASE_URL + "/recommend/%1&s?type=last&limit=%2$d";
     //endregion
 
     //region photo url
     public static final String PHOTO_URL_LARGE = "http://photos.tuchong.com/%1$d/l/%2$d.jpg";
+
     public static final String PHOTO_URL_MEDIUM = "http://photos.tuchong.com/%1$d/m/%2$d.jpg";
+
     public static final String PHOTO_URL_SMALL = "http://photos.tuchong.com/%1$d/s/%2$d.jpg";
     //endregion
 }

@@ -13,10 +13,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
+import butterknife.OnClick;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.model.TCActivity;
+import info.lofei.app.tuchong.model.TCImage;
+import info.lofei.app.tuchong.model.TCPost;
+import info.lofei.app.tuchong.model.TCSite;
+import info.lofei.app.tuchong.util.SitesMapCache;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
@@ -42,23 +48,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_main, null);
-
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_main, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         TCActivity activity = mTCActivitiesList.get(position);
-        if (activity != null) {
-            // TODO get the correct author name
-            holder.author_name.setText(String.valueOf(activity.getPost().getAuthor_id()));
-            holder.title.setText(activity.getPost().getTitle());
-            holder.like_count.setText(String.valueOf(activity.getPost().getFavorites()));
-            holder.comment_count.setText(String.valueOf(activity.getPost().getComments()));
-            String url = String.format(TuChongApi.PHOTO_URL_LARGE, activity.getPost().getAuthor_id(), activity.getPost().getImages().get(0).getImg_id());
-            RequestManager.loadImage(url, RequestManager.getImageListener(holder.image, null, mFailedDrawable));
-        }
+        holder.bindData(activity);
     }
 
     @Override
@@ -68,24 +65,53 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.iv_photo)
+        View itemView;
+
+        @Bind(R.id.iv_photo)
         ImageView image;
 
-        @InjectView(R.id.tv_title)
+        @Bind(R.id.tv_title)
         TextView title;
 
-        @InjectView(R.id.tv_like_count)
+        @Bind(R.id.tv_like_count)
         TextView like_count;
 
-        @InjectView(R.id.tv_comment_count)
+        @Bind(R.id.tv_comment_count)
         TextView comment_count;
 
-        @InjectView(R.id.tv_author_name)
+        @Bind(R.id.tv_author_name)
         TextView author_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
+            this.itemView = itemView;
+        }
+
+        public void bindData(final TCActivity activity) {
+            if (activity != null) {
+                final TCPost post = activity.getPost();
+                TCSite site = SitesMapCache.getSite(post.getAuthor_id());
+                if (site != null) {
+                    author_name.setText(site.getName());
+                }
+                title.setText(post.getTitle());
+                like_count.setText(String.valueOf(post.getFavorites()));
+                comment_count.setText(String.valueOf(post.getComments()));
+                if (post.getImage_count() > 0) {
+                    TCImage tcImage = post.getImages().get(0);
+                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthor_id(), tcImage.getImg_id());
+                    RequestManager.loadImage(url, RequestManager.getImageListener(image, null, mFailedDrawable));
+                }
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        if (mContext instanceof MainActivity) {
+                            ((MainActivity) mContext).launchDetailFragment(post);
+                        }
+                    }
+                });
+            }
         }
     }
 }

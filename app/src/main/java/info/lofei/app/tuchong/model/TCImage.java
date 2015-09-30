@@ -1,5 +1,7 @@
 package info.lofei.app.tuchong.model;
 
+import java.io.Serializable;
+
 /**
  * model of an image.
  *
@@ -7,7 +9,7 @@ package info.lofei.app.tuchong.model;
  * @version 1.0.0
  *          created at: 2015-06-22 20:17
  */
-public class TCImage {
+public class TCImage implements Serializable {
 
     private long img_id;
 

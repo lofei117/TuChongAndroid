@@ -40,12 +40,12 @@ public class SimpleCookieStore implements CookieStore {
             mDefaultCookieStore.add(URI.create(httpCookie.getDomain()), httpCookie);
         }
         String emailCookieString = PreferenceUtil.getString(Constant.EMAIL_KEY, "");
-        if (!TextUtils.isEmpty(sessionCookieString)) {
+        if (!TextUtils.isEmpty(emailCookieString)) {
             HttpCookie httpCookie = mGson.fromJson(emailCookieString, HttpCookie.class);
             mDefaultCookieStore.add(URI.create(httpCookie.getDomain()), httpCookie);
         }
         String tokenCookieString = PreferenceUtil.getString(Constant.TOKEN_KEY, "");
-        if (!TextUtils.isEmpty(sessionCookieString)) {
+        if (!TextUtils.isEmpty(tokenCookieString)) {
             HttpCookie httpCookie = mGson.fromJson(tokenCookieString, HttpCookie.class);
             mDefaultCookieStore.add(URI.create(httpCookie.getDomain()), httpCookie);
         }

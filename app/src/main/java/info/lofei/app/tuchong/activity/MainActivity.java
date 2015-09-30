@@ -1,53 +1,33 @@
 package info.lofei.app.tuchong.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.igexin.sdk.PushManager;
-
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import info.lofei.app.tuchong.R;
-import info.lofei.app.tuchong.adapter.MainAdapter;
+import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.LoginFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
-import info.lofei.app.tuchong.model.TCActivity;
-import info.lofei.app.tuchong.util.RSA;
-import info.lofei.app.tuchong.vendor.TuChongApi;
+import info.lofei.app.tuchong.model.TCPost;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    @InjectView(R.id.drawer_layout)
+    @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     private MainFragment mMainFragment;
@@ -55,12 +35,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PushManager.getInstance().initialize(this);
+
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setupDrawerView();
         setupToolbar();
+        setupDrawerLayout();
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         mMainFragment = MainFragment.newInstance();
@@ -78,8 +59,27 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void setupDrawerLayout() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
+        toggle.syncState();
+        mDrawerLayout.setDrawerListener(toggle);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -95,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -112,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
 
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_home:
+                            case R.id.nav_activity:
                                 Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                                 break;
                             default:
@@ -133,4 +128,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, LoginFragment.newInstance()).commit();
     }
+
+    public void launchDetailFragment(final TCPost tcPost) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        DetailFragment fragment = DetailFragment.newInstance(tcPost);
+        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(DetailFragment.class.getSimpleName()).commit();
+    }
+
 }

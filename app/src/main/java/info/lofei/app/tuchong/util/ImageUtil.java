@@ -16,6 +16,6 @@ public class ImageUtil {
         if (bitmap == null) {
             return 0;
         }
-        return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
+        return bitmap.getRowBytes() * bitmap.getHeight();
     }
 }
