@@ -62,6 +62,7 @@ public class LoginFragment extends BaseFragment {
     @Bind(R.id.captcha_input)
     EditText mCaptchaEditText;
 
+    private Captcha mGetCaptcha;
 
     private MainActivity mMainActivity;
 
@@ -99,6 +100,11 @@ public class LoginFragment extends BaseFragment {
         params.put(USERNAME_KEY, username);
         params.put(PASSWORD_KEY, encodedPassword);
         params.put("remember", "on");
+        if(mGetCaptcha != null  && !TextUtils.isEmpty(mGetCaptcha.getId())
+                && !TextUtils.isEmpty(mGetCaptcha.getBase64())){
+            params.put("captcha_token", mCaptchaEditText.getText().toString());
+            params.put("captcha_id", mGetCaptcha.getId());
+        }
 
         executeRequest(new LoginRequest(Request.Method.POST, TuChongApi.LOGIN_URL, params, new Response.Listener<LoginResult>() {
             @Override
@@ -121,6 +127,7 @@ public class LoginFragment extends BaseFragment {
                         break;
                     case LoginResult.CODE_NEED_CAPTCHA:
                     case LoginResult.CODE_VIDIFY_ERROR:
+                        mChaptchaRegionView.setVisibility(View.VISIBLE);
                         Toast.makeText(getActivity(), "VIDIFY ERROR OR NEED CAPTCHA", Toast.LENGTH_SHORT).show();
                         fetchCaptcha();
                         break;
@@ -141,6 +148,7 @@ public class LoginFragment extends BaseFragment {
         executeRequest(new CaptchaRequest(new Response.Listener<Captcha>() {
             @Override
             public void onResponse(Captcha response) {
+                mGetCaptcha = response;
                 if(response == null || TextUtils.isEmpty(response.getBase64())){
                     return;
                 }
