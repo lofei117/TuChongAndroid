@@ -1,11 +1,16 @@
 package info.lofei.app.tuchong.fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,9 +22,13 @@ import java.util.HashMap;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import butterknife.OnClick;
+import info.lofei.app.tuchong.BaseApplication;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
+import info.lofei.app.tuchong.data.request.CaptchaRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
+import info.lofei.app.tuchong.data.request.result.Captcha;
+import info.lofei.app.tuchong.data.request.result.LoginResult;
 import info.lofei.app.tuchong.util.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -40,6 +49,20 @@ public class LoginFragment extends BaseFragment {
 
     @Bind(R.id.et_password)
     EditText mPasswordEditText;
+
+    @Bind(R.id.captcha_region)
+    View mChaptchaRegionView;
+
+    @Bind(R.id.captcha_fetch)
+    ImageView mReFetchCaptchaBtn;
+
+    @Bind(R.id.captcha_view)
+    ImageView mCaptchaShowView;
+
+    @Bind(R.id.captcha_input)
+    EditText mCaptchaEditText;
+
+    private Captcha mGetCaptcha;
 
     private MainActivity mMainActivity;
 
@@ -77,14 +100,39 @@ public class LoginFragment extends BaseFragment {
         params.put(USERNAME_KEY, username);
         params.put(PASSWORD_KEY, encodedPassword);
         params.put("remember", "on");
+        if(mGetCaptcha != null  && !TextUtils.isEmpty(mGetCaptcha.getId())
+                && !TextUtils.isEmpty(mGetCaptcha.getBase64())){
+            params.put("captcha_token", mCaptchaEditText.getText().toString());
+            params.put("captcha_id", mGetCaptcha.getId());
+        }
 
-        executeRequest(new LoginRequest(Request.Method.POST, TuChongApi.LOGIN_URL, params, new Response.Listener<Boolean>() {
+        executeRequest(new LoginRequest(Request.Method.POST, TuChongApi.LOGIN_URL, params, new Response.Listener<LoginResult>() {
             @Override
-            public void onResponse(final Boolean response) {
-                Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
-                if (mMainActivity != null) {
-                    mMainActivity.launchMainFragment();
+            public void onResponse(LoginResult response) {
+                if (response == null) {
+                    return;
                 }
+
+                Toast.makeText(BaseApplication.getBaseApplication(),
+                        response.getMessage(), Toast.LENGTH_SHORT).show();
+
+                switch (response.getCode()) {
+                    case LoginResult.CODE_SUCCESS:
+                        if (mMainActivity != null) {
+                            mMainActivity.launchMainFragment();
+                        }
+                        break;
+                    case LoginResult.CODE_PWD_OR_NAME_ERROR:
+
+                        break;
+                    case LoginResult.CODE_NEED_CAPTCHA:
+                    case LoginResult.CODE_VIDIFY_ERROR:
+                        mChaptchaRegionView.setVisibility(View.VISIBLE);
+                        Toast.makeText(getActivity(), "VIDIFY ERROR OR NEED CAPTCHA", Toast.LENGTH_SHORT).show();
+                        fetchCaptcha();
+                        break;
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -93,6 +141,39 @@ public class LoginFragment extends BaseFragment {
                 error.printStackTrace();
             }
         }));
+    }
+
+    @OnClick(R.id.captcha_fetch)
+    void fetchCaptcha(){
+        executeRequest(new CaptchaRequest(new Response.Listener<Captcha>() {
+            @Override
+            public void onResponse(Captcha response) {
+                mGetCaptcha = response;
+                if(response == null || TextUtils.isEmpty(response.getBase64())){
+                    return;
+                }
+                //显示验证码。
+                String base64 = response.getBase64().replace("data:image/png;base64,","").replace("==", "");
+
+                try {
+                    byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    mCaptchaShowView.setImageBitmap(decodedByte);
+                }catch (java.lang.IllegalArgumentException e){
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+
+        ));
     }
 
 }

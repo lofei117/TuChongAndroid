@@ -38,6 +38,36 @@
             android:maxLines="1"
             android:singleLine="true"/>
 
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/captcha_region"
+            android:visibility="gone"
+            >
+            <EditText
+                android:id="@+id/captcha_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity=""
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:singleLine="true"/>
+            <ImageView
+                android:id="@+id/captcha_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:src="@drawable/ic_cast_dark"
+                />
+            <ImageView
+                android:id="@+id/captcha_fetch"
+                android:layout_weight="0.5"
+                android:src ="@drawable/ic_media_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btn_login"
             style="?android:textAppearanceSmall"

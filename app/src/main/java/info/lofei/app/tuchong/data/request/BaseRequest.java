@@ -34,13 +34,13 @@ public abstract class BaseRequest<T> extends Request<T> {
 
     private Response.Listener<T> mListener;
 
-    public BaseRequest(final int method, final String url, final Map<String, String> params, final Response.Listener<T> listener, final Response.ErrorListener errorListener) {
+    protected BaseRequest(final int method, final String url, final Map<String, String> params, final Response.Listener<T> listener, final Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         mParams = params;
         mListener = listener;
     }
 
-    public BaseRequest(final String url, final Response.Listener<T> listener, final Response.ErrorListener errorListener) {
+    protected BaseRequest(final String url, final Response.Listener<T> listener, final Response.ErrorListener errorListener) {
         this(Method.GET, url, null, listener, errorListener);
     }
 
@@ -75,6 +75,7 @@ public abstract class BaseRequest<T> extends Request<T> {
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         } catch (JSONException e) {
+            e.printStackTrace();
             return Response.error(new ParseError(e));
         }
     }

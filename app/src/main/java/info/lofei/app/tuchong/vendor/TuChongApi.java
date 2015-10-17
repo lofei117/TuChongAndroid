@@ -20,6 +20,8 @@ public class TuChongApi {
 
     public static final String SITE_URL = BASE_URL + "site/get/?site_id=%1$d";
 
+    public static final String CAPTCHA_URL = BASE_URL +  "captcha/image";
+
     public static final String LOGIN_URL = BASE_URL + "accounts/login";
 
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
