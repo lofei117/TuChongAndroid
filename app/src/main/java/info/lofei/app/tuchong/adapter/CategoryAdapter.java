@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.RequestManager;
@@ -26,21 +26,21 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
 /**
  * Created by lofei on 6/18/15.
  */
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
     private Context mContext;
 
     private Drawable mFailedDrawable;
 
-    private List<TCActivity> mTCActivitiesList;
+    private List<TCPost> mTCPostList;
 
-    public MainAdapter(Context context) {
+    public CategoryAdapter(Context context) {
         mContext = context;
         mFailedDrawable = context.getResources().getDrawable(R.drawable.ic_dashboard);
     }
 
-    public void fillData(List<TCActivity> list) {
-        mTCActivitiesList = list;
+    public void fillData(List<TCPost> list) {
+        mTCPostList = list;
         notifyDataSetChanged();
     }
 
@@ -52,13 +52,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TCActivity activity = mTCActivitiesList.get(position);
-        holder.bindData(activity);
+        TCPost post = mTCPostList.get(position);
+        holder.bindData(post);
     }
 
     @Override
     public int getItemCount() {
-        return mTCActivitiesList == null ? 0 : mTCActivitiesList.size();
+        return mTCPostList == null ? 0 : mTCPostList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,9 +86,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             this.itemView = itemView;
         }
 
-        public void bindData(final TCActivity activity) {
-            if (activity != null) {
-                final TCPost post = activity.getPost();
+        public void bindData(final TCPost post) {
+            if (post != null) {
                 TCSite site = SitesMapCache.getSite(post.getAuthor_id());
                 if (site != null) {
                     author_name.setText(site.getName());

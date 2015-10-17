@@ -17,4 +17,7 @@
     <string name="category_documentary">纪实</string>
     <string name="category_still_life">静物</string>
     <string name="category_journey">旅行</string>
+
+    <string name="transition_image">transitionImage</string>
+    <string name="transition_title">transitionTitle</string>
 </resources>

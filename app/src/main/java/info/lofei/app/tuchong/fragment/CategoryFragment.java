@@ -22,22 +22,24 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
-import info.lofei.app.tuchong.adapter.MainAdapter;
-import info.lofei.app.tuchong.data.request.GetActivities;
-import info.lofei.app.tuchong.model.TCActivity;
+import info.lofei.app.tuchong.adapter.CategoryAdapter;
+import info.lofei.app.tuchong.data.request.GetCategoryPosts;
+import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.util.Constant;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
- * 主界面，活动列表.
+ * 各分类列表.
  *
  * @author lofei lofei@lofei.info
  * @version 1.0.0
- *          created at: 2015-07-02 22:19
+ *          created at: 2015-10-17 10:00
  */
-public class MainFragment extends BaseFragment {
+public class CategoryFragment extends BaseFragment {
 
-    private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String BUNDLE_ARG_CATEGORY = "bundle_arg_category";
+
+    private static final String TAG = CategoryFragment.class.getSimpleName();
 
     //region View region
     @Bind(R.id.recyclerView)
@@ -52,13 +54,23 @@ public class MainFragment extends BaseFragment {
 
     private MainActivity mMainActivity;
 
-    private MainAdapter mAdapter;
+    private CategoryAdapter mAdapter;
 
-    private List<TCActivity> mTCActivitiesList;
+    private List<TCPost> mTCPostList;
 
-    public static MainFragment newInstance() {
-        MainFragment mainFragment = new MainFragment();
-        return mainFragment;
+    private String mCategory;
+
+    public static CategoryFragment newInstance(String category) {
+        CategoryFragment fragment = new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putString(BUNDLE_ARG_CATEGORY, category);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -91,7 +103,7 @@ public class MainFragment extends BaseFragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
         if (mAdapter == null) {
-            mAdapter = new MainAdapter(mMainActivity);
+            mAdapter = new CategoryAdapter(mMainActivity);
         }
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -117,28 +129,34 @@ public class MainFragment extends BaseFragment {
     }
 
     private void setupData() {
-        if (mTCActivitiesList == null) {
-            mTCActivitiesList = new ArrayList<>(20);
-            mAdapter.fillData(mTCActivitiesList);
+        if (getArguments() != null) {
+            mCategory = getArguments().getString(BUNDLE_ARG_CATEGORY);
         }
+        if (mTCPostList == null) {
+            mTCPostList = new ArrayList<>(20);
+            mAdapter.fillData(mTCPostList);
+        }
+        loadData(true);
+    }
+
+    public void setCategory(String category) {
+        mCategory = category;
         loadData(true);
     }
 
     private void loadData(final boolean isRefresh) {
         if (isRefresh) {
             mSwipeRefreshLayout.setRefreshing(true);
-            mTCActivitiesList.clear();
+            mTCPostList.clear();
         }
-        int offset = isRefresh ? 0 : mTCActivitiesList.size();
-        String url = String.format(TuChongApi.ACTIVITY_LIST_URL, Constant.PAGE_COUNT, offset);
-        executeRequest(new GetActivities(url, new Response.Listener<List<TCActivity>>() {
+        String url = String.format(TuChongApi.CATEGORY_URL, mCategory, isRefresh ? "last" : "next", Constant.PAGE_COUNT);
+        executeRequest(new GetCategoryPosts(url, new Response.Listener<List<TCPost>>() {
             @Override
-            public void onResponse(final List<TCActivity> response) {
+            public void onResponse(final List<TCPost> response) {
                 if (!isDetached()) {
-                    mTCActivitiesList.addAll(response);
+                    mTCPostList.addAll(response);
                     mAdapter.notifyDataSetChanged();
                     mSwipeRefreshLayout.setRefreshing(false);
-
                 }
             }
         }, new Response.ErrorListener() {
@@ -149,14 +167,9 @@ public class MainFragment extends BaseFragment {
                     if (error instanceof AuthFailureError) {
                         mMainActivity.loginRequired();
                     }
-                    // TODO other error
                 }
             }
         }));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 }

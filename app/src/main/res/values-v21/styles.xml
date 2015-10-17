@@ -20,6 +20,7 @@
     <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="TextAppearance.NotificationHeader" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">

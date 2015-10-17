@@ -83,7 +83,7 @@ public class LoginFragment extends BaseFragment {
             public void onResponse(final Boolean response) {
                 Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
                 if (mMainActivity != null) {
-                    mMainActivity.onLoginSuccess();
+                    mMainActivity.launchMainFragment();
                 }
             }
         }, new Response.ErrorListener() {
