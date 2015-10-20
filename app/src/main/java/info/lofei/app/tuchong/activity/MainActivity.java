@@ -1,5 +1,6 @@
 package info.lofei.app.tuchong.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.LoginFragment;
@@ -30,6 +32,9 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
+    @Bind(R.id.profile_image)
+    CircleImageView profileImageView;
+
     private MainFragment mMainFragment;
 
     @Override
@@ -43,10 +48,16 @@ public class MainActivity extends BaseActivity {
         setupToolbar();
         setupDrawerLayout();
 
+        getUserInfo();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         mMainFragment = MainFragment.newInstance();
         fragmentTransaction.replace(R.id.fragment_container, mMainFragment).commit();
     }
+
+    private void getUserInfo(){
+        profileImageView.setImageResource(R.drawable.ic_dashboard);
+    }
+
 
     private void setupDrawerView() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -95,6 +106,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_settings){
+            startActivity(new Intent(this, SettingsActivity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -47,6 +47,8 @@ public class TCPost implements Serializable {
 
     private List<TCImage> images;
 
+    private List<String> tags;
+
     private boolean is_favorite;
 
     public long getPost_id() {
@@ -143,6 +145,14 @@ public class TCPost implements Serializable {
 
     public void setImages(final List<TCImage> images) {
         this.images = images;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public boolean is_favorite() {

@@ -23,6 +23,8 @@ public class TCImage implements Serializable {
 
     private int height;
 
+    private String description;
+
     public long getImg_id() {
         return img_id;
     }
