@@ -1,2 +1,3 @@
 # TuChongAndroid
-自己写的图虫的Android客户端
+第三方图虫Android客户端
+

@@ -1,23 +1,30 @@
 package info.lofei.app.tuchong.activity;
 
 import android.content.Intent;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.transition.ChangeBounds;
+import android.transition.Slide;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.fragment.CategoryFragment;
 import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.LoginFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
@@ -35,7 +42,11 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.profile_image)
     CircleImageView profileImageView;
 
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+
     private MainFragment mMainFragment;
+
+    private CategoryFragment mCategoryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +88,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupDrawerLayout() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
-        toggle.syncState();
-        mDrawerLayout.setDrawerListener(toggle);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
+        mActionBarDrawerToggle.syncState();
+        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -122,10 +133,21 @@ public class MainActivity extends BaseActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_activity:
-                                Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
+                                if (mMainFragment == null) {
+                                    mMainFragment = MainFragment.newInstance();
+                                }
+                                launchMainFragment();
                                 break;
                             default:
-                                Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                                String category = menuItem.getTitle().toString();
+                                if (mCategoryFragment == null || !mCategoryFragment.isVisible()) {
+                                    mCategoryFragment = CategoryFragment.newInstance(category);
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.fragment_container, mCategoryFragment).commitAllowingStateLoss();
+                                } else {
+                                    mCategoryFragment.setCategory(category);
+                                }
+
                                 break;
                         }
                         return true;
@@ -133,20 +155,43 @@ public class MainActivity extends BaseActivity {
                 });
     }
 
-    public void onLoginSuccess() {
+    public void launchMainFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, mMainFragment).commit();
+        fragmentTransaction.replace(R.id.fragment_container, mMainFragment).commitAllowingStateLoss();
     }
 
     public void loginRequired() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, LoginFragment.newInstance()).commit();
+        fragmentTransaction.replace(R.id.fragment_container, LoginFragment.newInstance()).commitAllowingStateLoss();
     }
 
-    public void launchDetailFragment(final TCPost tcPost) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void launchDetailFragment(final TCPost tcPost, final View view) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         DetailFragment fragment = DetailFragment.newInstance(tcPost);
-        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(DetailFragment.class.getSimpleName()).commit();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Slide slide = new Slide(Gravity.BOTTOM);
+            slide.setDuration(200);
+
+            ChangeBounds changeBounds = new ChangeBounds();
+            changeBounds.setDuration(200);
+
+            fragment.setEnterTransition(slide);
+            fragment.setAllowEnterTransitionOverlap(true);
+            fragment.setAllowReturnTransitionOverlap(true);
+            fragment.setSharedElementEnterTransition(changeBounds);
+            String transitionName = getString(R.string.transition_image);
+            Log.d("test", transitionName);
+//            view.setTransitionName(transitionName);
+            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
+            fragmentTransaction.addSharedElement(view, transitionName);
+//            supportPostponeEnterTransition();
+        }
+
+        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(DetailFragment.class.getSimpleName()).commitAllowingStateLoss();
+//        mActionBarDrawerToggle.onDrawerSlide(null, 0.5f);
+//        getSupportFragmentManager().executePendingTransactions();
     }
 
 }

@@ -119,7 +119,7 @@ public class LoginFragment extends BaseFragment {
                 switch (response.getCode()) {
                     case LoginResult.CODE_SUCCESS:
                         if (mMainActivity != null) {
-                            mMainActivity.onLoginSuccess();
+                            mMainActivity.launchMainFragment();
                         }
                         break;
                     case LoginResult.CODE_PWD_OR_NAME_ERROR:

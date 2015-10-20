@@ -1,7 +1,10 @@
 package info.lofei.app.tuchong.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.ImageLoader;
-
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.ImageActivity;
 import info.lofei.app.tuchong.data.RequestManager;
@@ -187,7 +188,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
         @Override
         void bindData(final int position) {
-            if (mPost.getType().equalsIgnoreCase(TCPost.TEXT)) {
+//            if (position == 0) {
+//                ViewCompat.setTransitionName(image, mContext.getString(R.string.transition_image));
+//                ((AppCompatActivity) mContext).supportStartPostponedEnterTransition();
+//            } else {
+//                ViewCompat.setTransitionName(image, null);
+//            }
+            if       (mPost.getType().equalsIgnoreCase(TCPost.TEXT)) {
                 title.setText(mPost.getTitle());
                 excerpt.setText(mPost.getExcerpt());
                 title.setVisibility(View.VISIBLE);
@@ -205,7 +212,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 public void onClick(final View v) {
                     Intent intent = new Intent(mContext, ImageActivity.class);
                     intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_URL, url);
-                    mContext.startActivity(intent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
+                                mContext.getString(R.string.transition_image));
+                        mContext.startActivity(intent, transitionActivityOptions.toBundle());
+                    } else {
+                        mContext.startActivity(intent);
+                    }
                 }
             });
 

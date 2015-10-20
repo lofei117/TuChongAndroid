@@ -30,7 +30,7 @@ public class TuChongApi {
 
     public static final String COMMENT_URL = BASE_URL + "/posts/%1$d/comments?type=comment";
 
-    public static final String CATEGORY_URL = BASE_URL + "/recommend/%1&s?type=last&limit=%2$d";
+    public static final String CATEGORY_URL = BASE_URL + "/recommend/%1$s?type=%2$s&limit=%3$d";
     //endregion
 
     //region photo url
