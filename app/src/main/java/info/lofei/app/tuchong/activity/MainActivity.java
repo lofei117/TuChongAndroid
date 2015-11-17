@@ -19,16 +19,26 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.data.RequestManager;
+import info.lofei.app.tuchong.data.request.GetSiteRequest;
 import info.lofei.app.tuchong.fragment.CategoryFragment;
 import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.LoginFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
+import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
+import info.lofei.app.tuchong.model.TCSite;
+import info.lofei.app.tuchong.util.Constant;
+import info.lofei.app.tuchong.vendor.TuChongApi;
 
 
 public class MainActivity extends BaseActivity {
@@ -41,6 +51,18 @@ public class MainActivity extends BaseActivity {
 
     @Bind(R.id.profile_image)
     CircleImageView profileImageView;
+
+    @Bind(R.id.username)
+    TextView mUserName;
+
+    @Bind(R.id.following)
+    TextView mFollowing;
+
+    @Bind(R.id.follower)
+    TextView mFollower;
+
+    @Bind(R.id.description)
+    TextView mDescription;
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
@@ -66,7 +88,27 @@ public class MainActivity extends BaseActivity {
     }
 
     private void getUserInfo(){
-        profileImageView.setImageResource(R.drawable.ic_dashboard);
+        String url = String.format(TuChongApi.SITE_URL, 1100130);//todo my site id.
+
+        execute(new GetSiteRequest(url, new Response.Listener<TCSite>() {
+            @Override
+            public void onResponse(TCSite site) {
+                if (site != null) {
+                    RequestManager.loadImage(site.getIcon(),
+                            RequestManager.getImageListener(profileImageView, null, null));
+                    mUserName.setText(site.getName());
+                    mFollower.setText("" + site.getFollowers());//差点又被坑
+                    mFollowing.setText("" + site.getFollowing());//预防被改int，又被坑。
+                    mDescription.setText(site.getDescription());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }));
+
     }
 
 

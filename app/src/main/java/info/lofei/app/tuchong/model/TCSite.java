@@ -40,9 +40,13 @@ public class TCSite {
     private String domain;
 
     /**
-     * 关注数目
+     * 粉丝数目
      */
     private int followers;
+
+    private String following;
+
+    private String description;
 
     /**
      * 用户或者小组主页
@@ -92,6 +96,22 @@ public class TCSite {
 
     public void setFollowers(final int followers) {
         this.followers = followers;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(String following) {
+        this.following = following;
     }
 
     public String getUrl() {

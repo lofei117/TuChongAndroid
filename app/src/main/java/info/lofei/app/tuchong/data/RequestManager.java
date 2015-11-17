@@ -18,6 +18,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.io.File;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -54,8 +55,11 @@ public class RequestManager {
     }
 
     private static Cache openCache() {
-        return new DiskBasedCache(BaseApplication.getBaseApplication().getExternalCacheDir(),
-                10 * 1024 * 1024);
+        File cacheDir =  BaseApplication.getBaseApplication().getExternalCacheDir();
+        if(cacheDir == null || !cacheDir.exists()){
+            cacheDir = BaseApplication.getBaseApplication().getCacheDir();
+        }
+        return new DiskBasedCache(cacheDir, 10 * 1024 * 1024);
     }
 
     public static void addRequest(Request request, Object tag) {

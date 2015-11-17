@@ -20,4 +20,7 @@
 
     <string name="transition_image">transitionImage</string>
     <string name="transition_title">transitionTitle</string>
+    <string name="settings_log_out">退出登录</string>
+    <string name="settings_clean_cache">清除缓存</string>
+    <string name="title_settings">设置</string>
 </resources>

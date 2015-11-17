@@ -26,6 +26,8 @@ public class TuChongApi {
 
     public static final String LOGIN_URL = BASE_URL + "accounts/login";
 
+    public static final String LOGOUT_URL = V1_BASE_URL + "account/logout";
+
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
 
     public static final String COMMENT_URL = BASE_URL + "/posts/%1$d/comments?type=comment";

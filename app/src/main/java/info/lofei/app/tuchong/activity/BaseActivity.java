@@ -1,9 +1,12 @@
 package info.lofei.app.tuchong.activity;
 
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Request;
 
+import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.data.RequestManager;
 
 /**
@@ -15,6 +18,17 @@ import info.lofei.app.tuchong.data.RequestManager;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AppManager.getInstance().add(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        AppManager.getInstance().remove(this);
+        super.onDestroy();
+    }
 
     protected void execute(Request request) {
         RequestManager.addRequest(request, this);
