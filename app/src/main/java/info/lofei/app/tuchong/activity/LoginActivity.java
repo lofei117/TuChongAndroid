@@ -1,14 +1,12 @@
-package info.lofei.app.tuchong.fragment;
+package info.lofei.app.tuchong.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,8 +17,8 @@ import com.android.volley.VolleyError;
 
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import info.lofei.app.tuchong.BaseApplication;
 import info.lofei.app.tuchong.R;
@@ -32,13 +30,9 @@ import info.lofei.app.tuchong.util.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
- * 登录界面.
- *
- * @author lofei lofei@lofei.info
- * @version 1.0.0
- *          created at: 2015-07-03 14:36
+ * Created by jerrysher on 11/18/15.
  */
-public class LoginFragment extends BaseFragment {
+public class LoginActivity extends BaseActivity {
 
     private static final String USERNAME_KEY = "account";
     private static final String PASSWORD_KEY = "password";
@@ -63,29 +57,11 @@ public class LoginFragment extends BaseFragment {
 
     private Captcha mGetCaptcha;
 
-    //private MainActivity mMainActivity;
-
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
-    }
-
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        //mMainActivity = (MainActivity) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        //mMainActivity = null;
-    }
-
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_login, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
     }
 
     @OnClick(R.id.btn_login)
@@ -117,9 +93,8 @@ public class LoginFragment extends BaseFragment {
 
                 switch (response.getCode()) {
                     case LoginResult.CODE_SUCCESS:
-//                        if (mMainActivity != null) {
-//                            mMainActivity.launchMainFragment();
-//                        }
+                        finish();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         break;
                     case LoginResult.CODE_PWD_OR_NAME_ERROR:
 
@@ -127,7 +102,7 @@ public class LoginFragment extends BaseFragment {
                     case LoginResult.CODE_NEED_CAPTCHA:
                     case LoginResult.CODE_VIDIFY_ERROR:
                         mChaptchaRegionView.setVisibility(View.VISIBLE);
-                        Toast.makeText(getActivity(), "VIDIFY ERROR OR NEED CAPTCHA", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "VIDIFY ERROR OR NEED CAPTCHA", Toast.LENGTH_SHORT).show();
                         fetchCaptcha();
                         break;
                 }
@@ -136,7 +111,7 @@ public class LoginFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError error) {
-                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "failed", Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
         }));
@@ -174,5 +149,4 @@ public class LoginFragment extends BaseFragment {
 
         ));
     }
-
 }

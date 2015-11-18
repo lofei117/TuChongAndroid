@@ -1,5 +1,6 @@
 package info.lofei.app.tuchong.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,10 +8,10 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.toolbox.ImageLoader;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.data.request.LogoutRequest;
 import info.lofei.app.tuchong.data.request.result.LogoutResult;
@@ -44,20 +45,22 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.log_out_button:
-                execute(new  LogoutRequest(Request.Method.POST, TuChongApi.LOGOUT_URL,
+                executeRequest(new LogoutRequest(Request.Method.POST, TuChongApi.LOGOUT_URL,
                         new Response.Listener<LogoutResult>() {
 
-                    @Override
-                    public void onResponse(LogoutResult response) {
-                        finish();
-                        if(response != null && "SUCCESS".equalsIgnoreCase(response.getResult())){
-                            //// leave blank
+                            @Override
+                            public void onResponse(LogoutResult response) {
+                                AppManager.getInstance().finishAllActivitis();
+                                startActivity(new Intent(SettingsActivity.this,
+                                        LoginActivity.class));
+                                if (response != null && "SUCCESS".equalsIgnoreCase(response.getResult())) {
+                                    //// leave blank
 
-                        }else{
-                            Toast.makeText(SettingsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, null));
+                                } else {
+                                    Toast.makeText(SettingsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }, null));
                 break;
 
             case R.id.setting_item_clean_cache:

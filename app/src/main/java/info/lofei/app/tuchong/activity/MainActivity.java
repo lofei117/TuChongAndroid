@@ -34,10 +34,8 @@ import info.lofei.app.tuchong.fragment.CategoryFragment;
 import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.LoginFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
-import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
-import info.lofei.app.tuchong.util.Constant;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 
@@ -90,7 +88,7 @@ public class MainActivity extends BaseActivity {
     private void getUserInfo(){
         String url = String.format(TuChongApi.SITE_URL, 1100130);//todo my site id.
 
-        execute(new GetSiteRequest(url, new Response.Listener<TCSite>() {
+        executeRequest(new GetSiteRequest(url, new Response.Listener<TCSite>() {
             @Override
             public void onResponse(TCSite site) {
                 if (site != null) {

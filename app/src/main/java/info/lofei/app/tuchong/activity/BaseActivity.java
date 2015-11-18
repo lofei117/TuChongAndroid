@@ -30,7 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    protected void execute(Request request) {
+    protected void executeRequest(Request request) {
         RequestManager.addRequest(request, this);
     }
 
