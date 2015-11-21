@@ -60,7 +60,7 @@ public class SimpleCookieStore implements CookieStore {
     private void saveCookieIfNeed(final HttpCookie cookie) {
         if (cookie.getName().equalsIgnoreCase(Constant.SESSION_KEY) || cookie.getName().equalsIgnoreCase(Constant.TOKEN_KEY) || cookie.getName().equalsIgnoreCase(Constant.EMAIL_KEY)) {
             String json = mGson.toJson(cookie);
-            PreferenceUtil.setString(cookie.getName(), json);
+            PreferenceUtil.putString(cookie.getName(), json);
             remove(URI.create(cookie.getDomain()), cookie);
         }
         mDefaultCookieStore.add(URI.create(cookie.getDomain()), cookie);

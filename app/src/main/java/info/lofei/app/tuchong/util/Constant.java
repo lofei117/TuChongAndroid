@@ -7,7 +7,7 @@ package info.lofei.app.tuchong.util;
  * @version 1.0.0
  *          created at: 2015-07-03 14:14
  */
-public class Constant {
+public interface Constant {
 
     public static final String COOKIE_KEY = "Cookie";
     public static final String SET_COOKIE_KEY = "Set-Cookie";
@@ -18,6 +18,15 @@ public class Constant {
     public static final String RESULT_KEY = "result";
     public static final String RESULT_SUCCESS = "SUCCESS";
     public static final String RESULT_FAILED = "ERROR";
+
+    public static final String RESULT_CODE_KEY = "code";
+
+
+    interface ResultCode{
+        int SUCCESS = 0;
+        int NEED_LOGIN = 1;
+        int HAD_FAVRIATED = 9;
+    }
 
     public static final int PAGE_COUNT = 20;
 }

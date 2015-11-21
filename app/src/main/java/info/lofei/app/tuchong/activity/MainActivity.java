@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.Slide;
 import android.util.Log;
@@ -21,21 +22,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.data.request.GetSiteRequest;
+import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.fragment.CategoryFragment;
 import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.LoginFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
+import info.lofei.app.tuchong.util.PreferenceUtil;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 
@@ -86,7 +91,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void getUserInfo(){
-        String url = String.format(TuChongApi.SITE_URL, 1100130);//todo my site id.
+        String currentUserId = PreferenceUtil.getString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, "");
+        if(TextUtils.isEmpty(currentUserId)){
+            loginRequired();
+        }
+
+        String url = String.format(TuChongApi.SITE_URL, currentUserId);
 
         executeRequest(new GetSiteRequest(url, new Response.Listener<TCSite>() {
             @Override
@@ -95,15 +105,17 @@ public class MainActivity extends BaseActivity {
                     RequestManager.loadImage(site.getIcon(),
                             RequestManager.getImageListener(profileImageView, null, null));
                     mUserName.setText(site.getName());
-                    mFollower.setText("" + site.getFollowers());//差点又被坑
-                    mFollowing.setText("" + site.getFollowing());//预防被改int，又被坑。
+                    mFollower.setText(String.format("%d",site.getFollowers()));
+                    mFollowing.setText(site.getFollowing());
                     mDescription.setText(site.getDescription());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                if (error instanceof AuthFailureError) {
+                    loginRequired();
+                }
             }
         }));
 
@@ -201,8 +213,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public void loginRequired() {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, LoginFragment.newInstance()).commitAllowingStateLoss();
+        RequestManager.cancelAll(this);
+        AppManager.getInstance().finishAllActivitis();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

@@ -24,6 +24,10 @@ import info.lofei.app.tuchong.data.request.result.LoginResult;
  */
 public class LoginRequest extends BaseRequest<LoginResult> {
 
+    public static final String USERNAME_KEY = "account";
+    public static final String PASSWORD_KEY = "password";
+    public static final String DATA_SAVE_TUCHONG_CURRENT_USER_ID = "TuChong_Current_User_Id";
+
     public LoginRequest(final int method, final String url, final Map<String, String> params, final Response.Listener<LoginResult> listener, final Response.ErrorListener errorListener) {
         super(method, url, params, listener, errorListener);
     }

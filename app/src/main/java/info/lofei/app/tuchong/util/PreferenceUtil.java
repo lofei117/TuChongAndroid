@@ -14,13 +14,22 @@ import info.lofei.app.tuchong.BaseApplication;
  */
 public class PreferenceUtil {
 
+    public static boolean hasKey(final String key) {
+        return PreferenceManager.getDefaultSharedPreferences(BaseApplication.getBaseApplication()).contains(key);
+    }
+
+
+    /*
+     * setter and putter .
+     */
+
     public static String getString(final String key, final String defaultValue) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
                 .getBaseApplication());
         return settings.getString(key, defaultValue);
     }
 
-    public static void setString(final String key, final String value) {
+    public static void putString(final String key, final String value) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
                 .getBaseApplication());
         settings.edit().putString(key, value).apply();
@@ -32,20 +41,23 @@ public class PreferenceUtil {
         return settings.getBoolean(key, defaultValue);
     }
 
-    public static boolean hasKey(final String key) {
-        return PreferenceManager.getDefaultSharedPreferences(BaseApplication.getBaseApplication()).contains(key);
-    }
-
-    public static void setBoolean(final String key, final boolean value) {
+    public static void putBoolean(final String key, final boolean value) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
                 .getBaseApplication());
         settings.edit().putBoolean(key, value).apply();
     }
 
-    public static void setInt(final String key, final int value) {
+
+    public static void putInt(final String key, final int value) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
                 .getBaseApplication());
         settings.edit().putInt(key, value).apply();
+    }
+
+    public static int getInt(final String key, final int defaultValue) {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
+                .getBaseApplication());
+        return settings.getInt(key, defaultValue);
     }
 
     public static void increaseInt(final String key) {
@@ -65,13 +77,8 @@ public class PreferenceUtil {
         sp.edit().putInt(key, v).apply();
     }
 
-    public static int getInt(final String key, final int defaultValue) {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
-                .getBaseApplication());
-        return settings.getInt(key, defaultValue);
-    }
 
-    public static void setFloat(final String key, final float value) {
+    public static void putFloat(final String key, final float value) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
                 .getBaseApplication());
         settings.edit().putFloat(key, value).apply();
@@ -83,7 +90,7 @@ public class PreferenceUtil {
         return settings.getFloat(key, defaultValue);
     }
 
-    public static void setLong(final String key, final long value) {
+    public static void putLong(final String key, final long value) {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(BaseApplication
                 .getBaseApplication());
         settings.edit().putLong(key, value).apply();

@@ -26,6 +26,7 @@ import info.lofei.app.tuchong.data.request.CaptchaRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.data.request.result.Captcha;
 import info.lofei.app.tuchong.data.request.result.LoginResult;
+import info.lofei.app.tuchong.util.PreferenceUtil;
 import info.lofei.app.tuchong.util.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -33,9 +34,6 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
  * Created by jerrysher on 11/18/15.
  */
 public class LoginActivity extends BaseActivity {
-
-    private static final String USERNAME_KEY = "account";
-    private static final String PASSWORD_KEY = "password";
 
     @Bind(R.id.et_username)
     EditText mUserNameEditText;
@@ -72,8 +70,8 @@ public class LoginActivity extends BaseActivity {
         String encodedPassword = new RSA().encrypt(originalPassword);
 
         HashMap<String, String> params = new HashMap<>(8);
-        params.put(USERNAME_KEY, username);
-        params.put(PASSWORD_KEY, encodedPassword);
+        params.put(LoginRequest.USERNAME_KEY, username);
+        params.put(LoginRequest.PASSWORD_KEY, encodedPassword);
         params.put("remember", "on");
         if(mGetCaptcha != null  && !TextUtils.isEmpty(mGetCaptcha.getId())
                 && !TextUtils.isEmpty(mGetCaptcha.getBase64())){
@@ -90,9 +88,10 @@ public class LoginActivity extends BaseActivity {
 
                 Toast.makeText(BaseApplication.getBaseApplication(),
                         response.getMessage(), Toast.LENGTH_SHORT).show();
-
                 switch (response.getCode()) {
                     case LoginResult.CODE_SUCCESS:
+                        //保存用户id
+                        PreferenceUtil.putString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, response.getId());
                         finish();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         break;
