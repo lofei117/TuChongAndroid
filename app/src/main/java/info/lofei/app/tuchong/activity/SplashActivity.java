@@ -11,7 +11,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.data.request.LoginRequest;
-import info.lofei.app.tuchong.util.PreferenceUtil;
+import info.lofei.app.tuchong.utils.PreferenceUtil;
 
 /**
  * Created by jerrysher on 11/18/15.

@@ -1,7 +1,6 @@
-package info.lofei.app.tuchong.util;
+package info.lofei.app.tuchong.utils;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 
 /**
  * ImageUtil.

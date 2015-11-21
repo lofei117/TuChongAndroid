@@ -25,7 +25,7 @@ import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.adapter.CategoryAdapter;
 import info.lofei.app.tuchong.data.request.GetCategoryPosts;
 import info.lofei.app.tuchong.model.TCPost;
-import info.lofei.app.tuchong.util.Constant;
+import info.lofei.app.tuchong.utils.Constant;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**

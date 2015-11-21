@@ -10,8 +10,8 @@ import java.net.HttpCookie;
 import java.net.URI;
 import java.util.List;
 
-import info.lofei.app.tuchong.util.Constant;
-import info.lofei.app.tuchong.util.PreferenceUtil;
+import info.lofei.app.tuchong.utils.Constant;
+import info.lofei.app.tuchong.utils.PreferenceUtil;
 
 /**
  * Simple Cookie store, save cookie to preference.

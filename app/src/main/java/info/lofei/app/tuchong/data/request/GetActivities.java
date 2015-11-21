@@ -13,7 +13,7 @@ import java.util.Map;
 
 import info.lofei.app.tuchong.model.TCActivity;
 import info.lofei.app.tuchong.model.TCSite;
-import info.lofei.app.tuchong.util.SitesMapCache;
+import info.lofei.app.tuchong.utils.SitesMapCache;
 
 /**
  * 首页的请求.

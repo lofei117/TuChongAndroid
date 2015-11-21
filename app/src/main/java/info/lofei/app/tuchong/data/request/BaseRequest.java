@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import info.lofei.app.tuchong.util.Constant;
+import info.lofei.app.tuchong.utils.Constant;
 
 /**
  * BaseRequest, 统一处理cookie和登录相关事宜.

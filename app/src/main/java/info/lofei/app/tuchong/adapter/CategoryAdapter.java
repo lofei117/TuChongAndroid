@@ -16,11 +16,10 @@ import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.RequestManager;
-import info.lofei.app.tuchong.model.TCActivity;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
-import info.lofei.app.tuchong.util.SitesMapCache;
+import info.lofei.app.tuchong.utils.SitesMapCache;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**

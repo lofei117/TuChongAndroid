@@ -20,7 +20,7 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
 /**
  * 设置页面
  *
- * @author jerrysher jerry@jerryzheng.net
+ * @author jerrysher jerry@jerryzhang.net
  * Created by jerrysher on 10/11/15.
  */
 public class SettingsActivity extends BaseActivity implements View.OnClickListener{

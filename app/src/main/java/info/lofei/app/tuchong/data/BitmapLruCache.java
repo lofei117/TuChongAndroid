@@ -5,7 +5,7 @@ import android.util.LruCache;
 
 import com.android.volley.toolbox.ImageLoader;
 
-import info.lofei.app.tuchong.util.ImageUtil;
+import info.lofei.app.tuchong.utils.ImageUtil;
 
 /**
  * BitmapLruCache.

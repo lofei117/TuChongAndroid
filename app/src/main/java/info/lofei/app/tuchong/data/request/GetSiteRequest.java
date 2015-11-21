@@ -2,18 +2,10 @@ package info.lofei.app.tuchong.data.request;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import info.lofei.app.tuchong.model.TCActivity;
 import info.lofei.app.tuchong.model.TCSite;
-import info.lofei.app.tuchong.util.SitesMapCache;
 
 /**
  * 站点信息的请求

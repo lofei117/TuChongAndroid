@@ -19,48 +19,63 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="24dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="JerrySher Zhang"
-        android:textSize="14sp"
-        android:textColor="#FFF"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:maxLines="1"
-        android:paddingBottom="4dp"
-        android:id="@+id/username"
-        android:layout_alignTop="@id/profile_image"
-        android:layout_toRightOf="@id/profile_image"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:layout_toRightOf="@id/profile_image"
+        android:layout_centerVertical="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="JerrySher Zhang"
+            android:textSize="14sp"
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:minHeight="30dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingBottom="4dp"
+            android:id="@+id/username"
+            />
 
-    <TextView
-        android:id="@+id/following"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="26\nFollowing"
-        android:textSize="14sp"
-        android:textColor="#FFF"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:maxLines="2"
-        android:layout_marginRight="24dp"
-        android:paddingBottom="4dp"
-        android:layout_below="@id/username"
-        android:layout_toRightOf="@id/profile_image"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/username"
+            android:layout_marginRight="24dp"
+            >
+            <TextView
+                android:id="@+id/following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_drawer_following"
+                android:textSize="14sp"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:maxLines="2"
+                android:paddingBottom="4dp"
+                />
 
-    <TextView
-        android:id="@+id/follower"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0\nFollower"
-        android:textSize="14sp"
-        android:textColor="#FFF"
-        android:textStyle="bold"
-        android:gravity="left|center_vertical"
-        android:maxLines="2"
-        android:paddingBottom="4dp"
-        android:layout_below="@id/username"
-        android:layout_toRightOf="@id/following"/>
+            <TextView
+                android:id="@+id/follower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_drawer_follower"
+                android:textSize="14sp"
+                android:textColor="#FFF"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:maxLines="2"
+                android:paddingBottom="4dp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/description"
@@ -74,6 +89,6 @@
         android:textColor="#fff"
         android:layout_marginLeft="24dp"
         android:layout_below="@id/profile_image"
-         />
+        />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package info.lofei.app.tuchong.util;
+package info.lofei.app.tuchong.utils;
 
 /**
  * Constants.

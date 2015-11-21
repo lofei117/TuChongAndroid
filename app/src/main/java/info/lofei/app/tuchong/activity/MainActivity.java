@@ -36,11 +36,11 @@ import info.lofei.app.tuchong.data.request.GetSiteRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.fragment.CategoryFragment;
 import info.lofei.app.tuchong.fragment.DetailFragment;
-import info.lofei.app.tuchong.fragment.LoginFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
-import info.lofei.app.tuchong.util.PreferenceUtil;
+import info.lofei.app.tuchong.utils.NumberUtil;
+import info.lofei.app.tuchong.utils.PreferenceUtil;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 
@@ -105,8 +105,8 @@ public class MainActivity extends BaseActivity {
                     RequestManager.loadImage(site.getIcon(),
                             RequestManager.getImageListener(profileImageView, null, null));
                     mUserName.setText(site.getName());
-                    mFollower.setText(String.format("%d",site.getFollowers()));
-                    mFollowing.setText(site.getFollowing());
+                    mFollower.setText(getString(R.string.str_drawer_follower, site.getFollowers()));
+                    mFollowing.setText(getString(R.string.str_drawer_following, NumberUtil.toInt(site.getFollowing())));
                     mDescription.setText(site.getDescription());
                 }
             }

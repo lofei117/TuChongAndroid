@@ -25,7 +25,7 @@ import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.adapter.MainAdapter;
 import info.lofei.app.tuchong.data.request.GetActivities;
 import info.lofei.app.tuchong.model.TCActivity;
-import info.lofei.app.tuchong.util.Constant;
+import info.lofei.app.tuchong.utils.Constant;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
