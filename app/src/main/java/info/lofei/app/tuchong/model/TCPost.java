@@ -49,6 +49,10 @@ public class TCPost implements Serializable {
 
     private List<String> tags;
 
+    private TCAuthor author;
+
+    private TCSite site;
+
     private boolean is_favorite;
 
     public long getPost_id() {
@@ -161,5 +165,21 @@ public class TCPost implements Serializable {
 
     public void setIs_favorite(final boolean is_favorite) {
         this.is_favorite = is_favorite;
+    }
+
+    public TCAuthor getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(TCAuthor author) {
+        this.author = author;
+    }
+
+    public TCSite getSite() {
+        return site;
+    }
+
+    public void setSite(TCSite site) {
+        this.site = site;
     }
 }

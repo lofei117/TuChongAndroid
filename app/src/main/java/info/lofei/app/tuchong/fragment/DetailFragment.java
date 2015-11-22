@@ -92,7 +92,7 @@ public class DetailFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
         if(mAdapter == null) {
             mAdapter = new DetailAdapter(mMainActivity, mTCPost);
-            mAdapter.fillData(mCommentList);
+            mAdapter.fillCommentsData(mCommentList);
         }
         mRecyclerView.setAdapter(mAdapter);
     }

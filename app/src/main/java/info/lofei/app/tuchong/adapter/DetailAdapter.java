@@ -24,6 +24,7 @@ import info.lofei.app.tuchong.model.TCAuthor;
 import info.lofei.app.tuchong.model.TCComment;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
+import info.lofei.app.tuchong.model.TCSite;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
@@ -35,6 +36,7 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
  */
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHolder> {
 
+    public static final int ITEM_COUNT_IN_ONE_LINE = 3;
     private Context mContext;
 
     private TCPost mPost;
@@ -46,7 +48,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         mContext = context;
     }
 
-    public void fillData(List<TCComment> commentList) {
+    public void fillCommentsData(List<TCComment> commentList) {
         mCommentList = commentList;
         notifyDataSetChanged();
     }
@@ -72,8 +74,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             case R.layout.item_comment_detail:
                 viewHolder = new CommentViewHolder(view);
                 break;
+            case R.layout.item_image_detail:
+                viewHolder = new PhotoImagesHolder(view);
+                break;
             default:
-                viewHolder = new ImageViewHolder(view);
+                viewHolder = new PhotoImagesHolder(view);
                 break;
         }
         return viewHolder;
@@ -86,7 +91,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
     @Override
     public int getItemCount() {
-        return mPost == null ? 0 : (getImageCount() + getHeaderCount() + getCommentCount());
+        return mPost == null ? 0 :
+                (getImageCount() + getHeaderCount() + getCommentCount());
     }
 
     private int getHeaderCount() {
@@ -94,7 +100,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     }
 
     private int getImageCount() {
-        return mPost.getImage_count();
+        int line = mPost.getImage_count() / ITEM_COUNT_IN_ONE_LINE +
+                (mPost.getImage_count() % ITEM_COUNT_IN_ONE_LINE == 0 ? 0 : 1);
+        return line;
     }
 
     private int getCommentCount() {
@@ -114,10 +122,19 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     class HeaderViewHolder extends BaseViewHolder {
 
         @Bind(R.id.tv_title)
-        TextView title;
+        TextView postTitle;
 
         @Bind(R.id.tv_excerpt)
-        TextView excerpt;
+        TextView postExcerpt;
+
+        @Bind(R.id.iv_avatar)
+        ImageView postAuthorAvatar;
+
+        @Bind(R.id.tv_post_author_name)
+        TextView postAuthorName;
+
+        @Bind(R.id.tv_post_published_at)
+        TextView postPublishedAt;
 
         public HeaderViewHolder(final View itemView) {
             super(itemView);
@@ -126,12 +143,37 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Override
         void bindData(final int position) {
             if (mPost.getTitle().isEmpty()) {
-                title.setVisibility(View.GONE);
+                postTitle.setVisibility(View.GONE);
             } else if (mPost.getExcerpt().isEmpty()){
-                excerpt.setVisibility(View.GONE);
-                title.setText(mPost.getTitle());
+                postExcerpt.setVisibility(View.GONE);
+                postTitle.setText(mPost.getTitle());
+                //postTitle.setText(mPost.get);
             }
-            excerpt.setText(mPost.getExcerpt());
+            postPublishedAt.setText(mPost.getPublished_at());
+            TCAuthor author = mPost.getAuthor();
+
+            TCSite site = mPost.getSite();
+
+            if(author != null){
+                postAuthorName.setText(author.getName());
+                RequestManager.loadImage(author.getIconUrl(),
+                        RequestManager.getImageListener(postAuthorAvatar, null, null));
+                //postAuthorAvatar.setOnClickListener(this);
+            }
+
+            if(site != null){
+                postAuthorName.setText(site.getName());
+                RequestManager.loadImage(site.getIcon(),
+                        RequestManager.getImageListener(postAuthorAvatar, null, null));
+                //postAuthorAvatar.setOnClickListener(this);
+            }
+
+            if(author == null && site == null){
+                postAuthorName.setVisibility(View.GONE);
+                postAuthorAvatar.setVisibility(View.GONE);
+            }
+
+            postExcerpt.setText(mPost.getExcerpt());
         }
     }
 
@@ -171,18 +213,23 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         }
     }
 
-    class ImageViewHolder extends BaseViewHolder {
+    class PhotoImagesHolder extends BaseViewHolder {
 
-        @Bind(R.id.tv_title)
-        TextView title;
+        @Bind(R.id.iv_photo_layout)
+        ViewGroup imageLayout;
 
-        @Bind(R.id.tv_excerpt)
-        TextView excerpt;
+        @Bind(R.id.left_photo_view)
+        ImageView leftPhotoView;
 
-        @Bind(R.id.iv_photo)
-        ImageView image;
+        @Bind(R.id.middle_photo_view)
+        ImageView middlePhotoView;
 
-        public ImageViewHolder(final View itemView) {
+        @Bind(R.id.right_photo_view)
+        ImageView rightPhotoView;
+
+
+
+        public PhotoImagesHolder(final View itemView) {
             super(itemView);
         }
 
@@ -194,41 +241,71 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 //            } else {
 //                ViewCompat.setTransitionName(image, null);
 //            }
-            if       (mPost.getType().equalsIgnoreCase(TCPost.TEXT)) {
-                title.setText(mPost.getTitle());
-                excerpt.setText(mPost.getExcerpt());
-                title.setVisibility(View.VISIBLE);
-                excerpt.setVisibility(View.VISIBLE);
-            } else {
-                title.setVisibility(View.GONE);
-                excerpt.setVisibility(View.GONE);
+            //todo  the TCPost.TEXT type post need to handle.
+
+            if (mPost.getImages() == null || mPost.getImages().isEmpty()){
+                return;
             }
-            TCImage tcImage = mPost.getImages().get(position - getHeaderCount());
-            final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthor_id(), tcImage.getImg_id());
-            RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
 
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    Intent intent = new Intent(mContext, ImageActivity.class);
-                    intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_URL, url);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
-                                mContext.getString(R.string.transition_image));
-                        mContext.startActivity(intent, transitionActivityOptions.toBundle());
-                    } else {
-                        mContext.startActivity(intent);
+            int baseItemIdx = (position - getHeaderCount()) * ITEM_COUNT_IN_ONE_LINE;
+
+            for(int i = 0; i < ITEM_COUNT_IN_ONE_LINE; i++){
+                int itemIdx = baseItemIdx + i;
+                final ImageView image;
+                switch (i){
+                    case 0:
+                        image = leftPhotoView;
+                        break;
+                    case 1:
+                        image = middlePhotoView;
+                        break;
+                    case 2:
+                        image = rightPhotoView;
+                        break;
+                    default:
+                        image = leftPhotoView;
+                        break;
+                }
+
+                image.setImageBitmap(null);
+
+                if(itemIdx >= mPost.getImages().size() || itemIdx < 0){
+                    image.setVisibility(baseItemIdx == 0 ? View.GONE : View.INVISIBLE);
+                    continue;
+                }
+
+                image.setVisibility(View.VISIBLE);
+
+                TCImage tcImage = mPost.getImages().get(itemIdx);
+
+                final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthor_id(),
+                        tcImage.getImg_id());
+                RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
+
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        Intent intent = new Intent(mContext, ImageActivity.class);
+                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_URL, url);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ActivityOptions transitionActivityOptions =
+                                    ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
+                                    mContext.getString(R.string.transition_image));
+                            mContext.startActivity(intent, transitionActivityOptions.toBundle());
+                        } else {
+                            mContext.startActivity(intent);
+                        }
                     }
-                }
-            });
+                });
 
-            image.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(final View v) {
-                    Toast.makeText(v.getContext(), "get exif data", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
+                image.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(final View v) {
+                        Toast.makeText(v.getContext(), "get exif data", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }
         }
     }
 }

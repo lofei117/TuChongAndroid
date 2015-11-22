@@ -40,7 +40,7 @@ public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     //region View region
-    @Bind(R.id.recyclerView)
+    @Bind(R.id.RecyclerView)
     RecyclerView mRecyclerView;
 
     @Bind(R.id.fab)

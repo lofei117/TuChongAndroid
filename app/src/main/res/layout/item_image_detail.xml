@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    style="@style/Widget.CardView"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/card_margin"
@@ -9,34 +9,40 @@
     android:layout_marginRight="@dimen/card_margin">
 
     <LinearLayout
+        android:id="@+id/iv_photo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_title"
+        <ImageView
+            android:id="@+id/left_photo_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Friends"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:transitionName="@string/transition_image" />
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/middle_photo_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:transitionName="@string/transition_image" />
 
-            <ImageView
-                android:id="@+id/iv_photo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:transitionName="@string/transition_image"/>
-        </FrameLayout>
-
-
-        <TextView
-            android:id="@+id/tv_excerpt"
+        <ImageView
+            android:id="@+id/right_photo_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:transitionName="@string/transition_image" />
 
     </LinearLayout>
 

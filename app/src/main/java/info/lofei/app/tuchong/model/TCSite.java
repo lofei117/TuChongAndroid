@@ -3,6 +3,7 @@ package info.lofei.app.tuchong.model;
 import android.support.annotation.StringDef;
 import android.support.annotation.StringRes;
 
+import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -14,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
  * @version 1.0.0
  *          created at: 2015-06-27 22:52
  */
-public class TCSite {
+public class TCSite implements Serializable {
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({USER, COLLECTION})

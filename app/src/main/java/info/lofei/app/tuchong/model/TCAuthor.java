@@ -2,6 +2,8 @@ package info.lofei.app.tuchong.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Author info.
  *
@@ -9,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * @version 1.0.0
  *          created at: 2015-07-17 14:23
  */
-public class TCAuthor {
+public class TCAuthor implements Serializable {
 
     @SerializedName("site_id")
     private long siteId;
