@@ -144,7 +144,7 @@ public class PostDetailFragment extends BaseFragment {
             @Override
             public void onResponse(final List<TCComment> response) {
                 mCommentList.addAll(response);
-                //mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         }, new ErrorListener() {
             @Override
