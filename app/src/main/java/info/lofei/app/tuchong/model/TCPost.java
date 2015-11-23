@@ -45,15 +45,32 @@ public class TCPost implements Serializable {
 
     private int image_count;
 
-    private List<TCImage> images;
-
     private List<String> tags;
-
-    private TCAuthor author;
 
     private TCSite site;
 
+    private TCAuthor author;
+
+    private String parsedContent;
+
+    private int views;
+
+    private List<String> flags;
+
+    /*
+    "privileges": {
+        "edit": false,
+                "delete": false,
+                "admin": false,
+                "update": false
+    },
+     */
+
     private boolean is_favorite;
+
+
+    private List<TCImage> images;
+
 
     public long getPost_id() {
         return post_id;
@@ -181,5 +198,13 @@ public class TCPost implements Serializable {
 
     public void setSite(TCSite site) {
         this.site = site;
+    }
+
+    public String getParsedContent() {
+        return parsedContent;
+    }
+
+    public void setParsedContent(String parsedContent) {
+        this.parsedContent = parsedContent;
     }
 }

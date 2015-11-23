@@ -73,17 +73,20 @@ public class CategoryFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
+    private View view;
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
 
-        setupFloatActionButton();
-        setupRecyclerView();
-        setupSwipeRefreshLayout();
+        if(view == null){
+            view = inflater.inflate(R.layout.fragment_main, container, false);
+            ButterKnife.bind(this, view);
 
-        setupData();
+            setupFloatActionButton();
+            setupRecyclerView();
+            setupSwipeRefreshLayout();
 
+            setupData();
+        }
         return view;
     }
 

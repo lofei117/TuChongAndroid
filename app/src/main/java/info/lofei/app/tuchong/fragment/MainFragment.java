@@ -40,7 +40,7 @@ public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     //region View region
-    @Bind(R.id.RecyclerView)
+    @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
     @Bind(R.id.fab)
@@ -61,16 +61,19 @@ public class MainFragment extends BaseFragment {
         return mainFragment;
     }
 
+    private View view;
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
+        if(view == null){
+            view = inflater.inflate(R.layout.fragment_main, container, false);
+            ButterKnife.bind(this, view);
 
-        setupFloatActionButton();
-        setupRecyclerView();
-        setupSwipeRefreshLayout();
+            setupFloatActionButton();
+            setupRecyclerView();
+            setupSwipeRefreshLayout();
 
-        setupData();
+            setupData();
+        }
 
         return view;
     }
