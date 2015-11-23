@@ -35,7 +35,7 @@ import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.data.request.GetSiteRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.fragment.CategoryFragment;
-import info.lofei.app.tuchong.fragment.DetailFragment;
+import info.lofei.app.tuchong.fragment.PostDetailFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
@@ -221,7 +221,7 @@ public class MainActivity extends BaseActivity {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void launchDetailFragment(final TCPost tcPost, final View view) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        DetailFragment fragment = DetailFragment.newInstance(tcPost);
+        PostDetailFragment fragment = PostDetailFragment.newInstance(tcPost);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide slide = new Slide(Gravity.BOTTOM);
@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity {
 //            supportPostponeEnterTransition();
         }
 
-        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(DetailFragment.class.getSimpleName()).commitAllowingStateLoss();
+        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(PostDetailFragment.class.getSimpleName()).commitAllowingStateLoss();
 //        mActionBarDrawerToggle.onDrawerSlide(null, 0.5f);
 //        getSupportFragmentManager().executePendingTransactions();
     }

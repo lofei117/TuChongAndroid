@@ -20,9 +20,13 @@ import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.adapter.DetailAdapter;
 import info.lofei.app.tuchong.data.request.GetComments;
+import info.lofei.app.tuchong.data.request.GetPostDetail;
+import info.lofei.app.tuchong.model.TCAuthor;
 import info.lofei.app.tuchong.model.TCComment;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.vendor.TuChongApi;
+
+import static com.android.volley.Response.*;
 
 /**
  * 详情界面.
@@ -31,7 +35,7 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
  * @version 1.0.0
  *          created at: 2015-07-08 11:11
  */
-public class DetailFragment extends BaseFragment {
+public class PostDetailFragment extends BaseFragment {
 
     private static String BUNDLE_ARG_POST = "bundle_arg_post";
 
@@ -46,8 +50,8 @@ public class DetailFragment extends BaseFragment {
 
     private MainActivity mMainActivity;
 
-    public static DetailFragment newInstance(TCPost post) {
-        DetailFragment detailFragment = new DetailFragment();
+    public static PostDetailFragment newInstance(TCPost post) {
+        PostDetailFragment detailFragment = new PostDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(BUNDLE_ARG_POST, post);
         detailFragment.setArguments(bundle);
@@ -71,14 +75,42 @@ public class DetailFragment extends BaseFragment {
         mCommentList = new ArrayList<>(10);
     }
 
+    View view;
+
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        ButterKnife.bind(this, view);
+        if(view == null){
+            view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        setupRecyclerView();
-
+            ButterKnife.bind(this, view);
+            setupRecyclerView();
+        }
         return view;
+    }
+
+    private void loadPostDetailData() {
+        if(mTCPost != null){
+            executeRequest(new GetPostDetail(
+                    String.format(TuChongApi.POST_DETAIL_URL, mTCPost.getPost_id()),
+                    new Response.Listener<TCPost>() {
+
+                        @Override
+                        public void onResponse(TCPost response) {
+                            if (response != null) {
+                                mTCPost = response;
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }
+            ));
+        }
     }
 
     @Override
@@ -101,19 +133,20 @@ public class DetailFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        loadCommentListData();
+        loadPostDetailData();
     }
 
-    private void loadData() {
+    private void loadCommentListData() {
         mCommentList.clear();
         String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPost_id());
         executeRequest(new GetComments(url, new Response.Listener<List<TCComment>>() {
             @Override
             public void onResponse(final List<TCComment> response) {
                 mCommentList.addAll(response);
-                mAdapter.notifyDataSetChanged();
+                //mAdapter.notifyDataSetChanged();
             }
-        }, new Response.ErrorListener() {
+        }, new ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError error) {
 

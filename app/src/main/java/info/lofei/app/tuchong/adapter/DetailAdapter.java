@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,15 +141,25 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             super(itemView);
         }
 
+        private void setText(TextView textView, String str){
+            textView.setText(str);
+            textView.setVisibility(TextUtils.isEmpty(str) ? View.GONE : View.VISIBLE);
+        }
+
         @Override
         void bindData(final int position) {
-            if (mPost.getTitle().isEmpty()) {
-                postTitle.setVisibility(View.GONE);
-            } else if (mPost.getExcerpt().isEmpty()){
-                postExcerpt.setVisibility(View.GONE);
-                postTitle.setText(mPost.getTitle());
-                //postTitle.setText(mPost.get);
-            }
+
+            postAuthorName.setVisibility(View.VISIBLE);
+            postAuthorAvatar.setVisibility(View.VISIBLE);
+            postTitle.setVisibility(View.VISIBLE);
+            postTitle.setVisibility(View.VISIBLE);
+            postExcerpt.setVisibility(View.VISIBLE);
+            postPublishedAt.setVisibility(View.VISIBLE);
+
+            setText(postTitle, mPost.getTitle());
+            setText(postExcerpt, mPost.getParsedContent());
+            setText(postExcerpt, mPost.getExcerpt());
+
             postPublishedAt.setText(mPost.getPublished_at());
             TCAuthor author = mPost.getAuthor();
 
