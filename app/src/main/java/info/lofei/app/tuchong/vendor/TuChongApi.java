@@ -30,11 +30,15 @@ public class TuChongApi {
 
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
 
-    public static final String POST_DETAIL_URL = BASE_URL + "posts/%s";
+    public static final String COMMENT_URL = BASE_URL + "posts/%1$d/comments?type=comment";
 
-    public static final String COMMENT_URL = BASE_URL + "/posts/%1$d/comments?type=comment";
+    public static final String CATEGORY_URL = BASE_URL + "recommend/%1$s?type=%2$s&limit=%3$d";
 
-    public static final String CATEGORY_URL = BASE_URL + "/recommend/%1$s?type=%2$s&limit=%3$d";
+    public static final String POST_DETAIL_URL = BASE_URL + "posts/%1$d"; // post id
+
+    public static final String EXIF_DETAIL_URL = BASE_URL + "images/%1$d/exif";  // image id
+
+    public static final String EXIF_URL = V1_BASE_URL + "post/get-post/?img_id=%1$d&post_id=%2$d";
     //endregion
 
     //region photo url

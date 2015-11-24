@@ -83,3 +83,144 @@ POST
 }
 ```
 
+# 获取Post详情
+posts/{$post_id}
+POST
+
+####请求参数
+无
+
+#### 返回结果
+
+```
+{
+    post:{
+        post_id:"12655371",
+        type:"multi-photo",
+        url:"http://tuchong.com/1001424/12655371/",
+        site_id:"1001424",
+        author_id:"1001424",
+        published_at:"2015-08-03 23:00:37",
+        excerpt:"有些雾霾，云彩也不够多，不过好歹是出去拍了。",
+        favorites:0,
+        comments:0,
+        title:"西溪印象城的夕阳",
+        image_count:2,
+        tags:[
+            "杭州",
+            "夕阳",
+            "佳能"
+        ],
+        site:{
+            site_id:"1001424",
+            type:"user",
+            name:"爷爷泡的乌龙茶",
+            domain:"",
+            url:"http://tuchong.com/1001424/",
+            icon:"http://s1.tuchong.net/sites/100/1001424/logo_small.jpg?1",
+            description:"",
+            followers:6
+        },
+        author:{
+            site_id:"1001424",
+            type:"user",
+            name:"爷爷泡的乌龙茶",
+            domain:"",
+            followers:6,
+            url:"http://tuchong.com/1001424/",
+            icon:"http://s1.tuchong.net/sites/100/1001424/logo_small.jpg?1"
+        },
+        parsedContent:"有些雾霾，云彩也不够多，不过好歹是出去拍了。",
+        views:14,
+        flags:[
+
+        ],
+        privileges:{
+            edit:true,
+            delete:true,
+            admin:false,
+            update:true
+        },
+        is_favorite:null
+    },
+    images:[
+        {
+            img_id:14914950,
+            user_id:1001424,
+            title:null,
+            excerpt:"",
+            width:2000,
+            height:1333,
+            description:"",
+            user:{
+                site_id:"1001424",
+                type:"user",
+                name:"爷爷泡的乌龙茶",
+                domain:"",
+                followers:6,
+                url:"http://tuchong.com/1001424/",
+                icon:"http://s1.tuchong.net/sites/100/1001424/logo_small.jpg?1"
+            },
+            exif:{
+                camera:{
+                    name:"Canon EOS 70D",
+                    slug:"canon-eos-70d",
+                    url:"http://tuchong.com/body/canon-eos-70d/"
+                },
+                lens:{
+                    name:"Canon EF-S 18-200mm f/3.5-5.6 IS",
+                    slug:"canon-ef-s-18-200mm-f-3.5-5.6-is",
+                    url:"http://tuchong.com/lens/canon-ef-s-18-200mm-f-3.5-5.6-is/"
+                },
+                exposure:"f/3.5, 1/8000s, ISO1600",
+                taken:"2015-08-02 18:30:51"
+            },
+            privileges:{
+                download:true,
+                admin:false
+            }
+        },
+        {
+            img_id:14914951,
+            user_id:1001424,
+            title:null,
+            excerpt:"",
+            width:2000,
+            height:1333,
+            description:"",
+            user:{
+                site_id:"1001424",
+                type:"user",
+                name:"爷爷泡的乌龙茶",
+                domain:"",
+                followers:6,
+                url:"http://tuchong.com/1001424/",
+                icon:"http://s1.tuchong.net/sites/100/1001424/logo_small.jpg?1"
+            },
+            exif:{
+                camera:{
+                    name:"Canon EOS 70D",
+                    slug:"canon-eos-70d",
+                    url:"http://tuchong.com/body/canon-eos-70d/"
+                },
+                lens:{
+                    name:"Canon EF-S 18-200mm f/3.5-5.6 IS",
+                    slug:"canon-ef-s-18-200mm-f-3.5-5.6-is",
+                    url:"http://tuchong.com/lens/canon-ef-s-18-200mm-f-3.5-5.6-is/"
+                },
+                exposure:"f/6.3, 1/1250s, ISO100",
+                taken:"2015-08-02 18:32:14"
+            },
+            privileges:{
+                download:true,
+                admin:false
+            }
+        }
+    ],
+    result:"SUCCESS"
+}
+```
+
+示例地址： [http://tuchong.com/rest/posts/12655371](http://tuchong.com/rest/posts/12655371 "Post Detail")
+
+图片的Exif等信息也通过此接口获取

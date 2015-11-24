@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -43,6 +42,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     private TCPost mPost;
 
     private List<TCComment> mCommentList;
+
+    private OnImageLongClickListener mOnImageLongClickListener;
 
     public DetailAdapter(final Context context, final TCPost post) {
         mPost = post;
@@ -110,6 +111,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         return mCommentList == null ? 0 : mCommentList.size();
     }
 
+    public void setOnImageLongClickListener(OnImageLongClickListener onImageLongClickListener) {
+        mOnImageLongClickListener = onImageLongClickListener;
+    }
+
     abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         public BaseViewHolder(final View itemView) {
@@ -141,7 +146,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             super(itemView);
         }
 
-        private void setText(TextView textView, String str){
+        private void setText(TextView textView, String str) {
             textView.setText(str);
             textView.setVisibility(TextUtils.isEmpty(str) ? View.GONE : View.VISIBLE);
         }
@@ -165,21 +170,21 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
             TCSite site = mPost.getSite();
 
-            if(author != null){
+            if (author != null) {
                 postAuthorName.setText(author.getName());
                 RequestManager.loadImage(author.getIconUrl(),
                         RequestManager.getImageListener(postAuthorAvatar, null, null));
                 //postAuthorAvatar.setOnClickListener(this);
             }
 
-            if(site != null){
+            if (site != null) {
                 postAuthorName.setText(site.getName());
                 RequestManager.loadImage(site.getIcon(),
                         RequestManager.getImageListener(postAuthorAvatar, null, null));
                 //postAuthorAvatar.setOnClickListener(this);
             }
 
-            if(author == null && site == null){
+            if (author == null && site == null) {
                 postAuthorName.setVisibility(View.GONE);
                 postAuthorAvatar.setVisibility(View.GONE);
             }
@@ -239,7 +244,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         ImageView rightPhotoView;
 
 
-
         public PhotoImagesHolder(final View itemView) {
             super(itemView);
         }
@@ -254,16 +258,16 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 //            }
             //todo  the TCPost.TEXT type post need to handle.
 
-            if (mPost.getImages() == null || mPost.getImages().isEmpty()){
+            if (mPost.getImages() == null || mPost.getImages().isEmpty()) {
                 return;
             }
 
             int baseItemIdx = (position - getHeaderCount()) * ITEM_COUNT_IN_ONE_LINE;
 
-            for(int i = 0; i < ITEM_COUNT_IN_ONE_LINE; i++){
+            for (int i = 0; i < ITEM_COUNT_IN_ONE_LINE; i++) {
                 int itemIdx = baseItemIdx + i;
                 final ImageView image;
-                switch (i){
+                switch (i) {
                     case 0:
                         image = leftPhotoView;
                         break;
@@ -276,18 +280,19 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                     default:
                         image = leftPhotoView;
                         break;
+
                 }
 
                 image.setImageBitmap(null);
 
-                if(itemIdx >= mPost.getImages().size() || itemIdx < 0){
+                if (itemIdx >= mPost.getImages().size() || itemIdx < 0) {
                     image.setVisibility(baseItemIdx == 0 ? View.GONE : View.INVISIBLE);
                     continue;
                 }
 
                 image.setVisibility(View.VISIBLE);
 
-                TCImage tcImage = mPost.getImages().get(itemIdx);
+                final TCImage tcImage = mPost.getImages().get(itemIdx);
 
                 final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthor_id(),
                         tcImage.getImg_id());
@@ -301,7 +306,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ActivityOptions transitionActivityOptions =
                                     ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
-                                    mContext.getString(R.string.transition_image));
+                                            mContext.getString(R.string.transition_image));
                             mContext.startActivity(intent, transitionActivityOptions.toBundle());
                         } else {
                             mContext.startActivity(intent);
@@ -309,14 +314,23 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                     }
                 });
 
-                image.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(final View v) {
-                        Toast.makeText(v.getContext(), "get exif data", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
+
+                if (mOnImageLongClickListener != null) {
+                    image.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return mOnImageLongClickListener.onLongClick(v, tcImage.getImg_id(), mPost.getPost_id());
+                        }
+                    });
+                }
             }
         }
+
     }
+
+    public interface OnImageLongClickListener {
+
+        boolean onLongClick(View view, long imageId, long postId);
+    }
+
 }

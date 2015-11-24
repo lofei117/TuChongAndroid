@@ -237,8 +237,8 @@ public class MainActivity extends BaseActivity {
             String transitionName = getString(R.string.transition_image);
             Log.d("test", transitionName);
 //            view.setTransitionName(transitionName);
-            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
-            fragmentTransaction.addSharedElement(view, transitionName);
+//            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
+//            fragmentTransaction.addSharedElement(view, transitionName);
 //            supportPostponeEnterTransition();
         }
 

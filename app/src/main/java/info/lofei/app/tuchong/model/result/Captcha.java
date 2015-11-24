@@ -1,4 +1,4 @@
-package info.lofei.app.tuchong.data.request.result;
+package info.lofei.app.tuchong.model.result;
 
 import com.google.gson.annotations.SerializedName;
 

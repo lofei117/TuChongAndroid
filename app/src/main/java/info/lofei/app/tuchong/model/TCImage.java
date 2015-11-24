@@ -72,4 +72,16 @@ public class TCImage implements Serializable {
     public void setHeight(final int height) {
         this.height = height;
     }
+
+    @Override
+    public String toString() {
+        return "TCImage{" +
+                "img_id=" + img_id +
+                ", user_id=" + user_id +
+                ", title='" + title + '\'' +
+                ", excerpt='" + excerpt + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
+    }
 }
