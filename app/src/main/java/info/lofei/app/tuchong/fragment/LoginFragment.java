@@ -27,8 +27,8 @@ import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.request.CaptchaRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
-import info.lofei.app.tuchong.data.request.result.Captcha;
-import info.lofei.app.tuchong.data.request.result.LoginResult;
+import info.lofei.app.tuchong.model.result.Captcha;
+import info.lofei.app.tuchong.model.result.LoginResult;
 import info.lofei.app.tuchong.util.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 

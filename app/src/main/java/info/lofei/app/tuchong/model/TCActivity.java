@@ -50,4 +50,14 @@ public class TCActivity {
     public void setPost(final TCPost post) {
         this.post = post;
     }
+
+    @Override
+    public String toString() {
+        return "TCActivity{" +
+                "type='" + type + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", site_id_array=" + site_id_array +
+                ", post=" + post +
+                '}';
+    }
 }

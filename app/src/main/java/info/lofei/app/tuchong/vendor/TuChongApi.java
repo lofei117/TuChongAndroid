@@ -16,6 +16,8 @@ public class TuChongApi {
     //region apis
     private static final String BASE_URL = "http://tuchong.com/rest/";
 
+    private static final String BASE_URL_OLD = "http://tuchong.com/api/";
+
     public static final String ACTIVITY_LIST_URL = BASE_URL + "users/self/activities?count=%1$d&offset=%2$d";
 
     public static final String SITE_URL = BASE_URL + "site/get/?site_id=%1$d";
@@ -26,9 +28,15 @@ public class TuChongApi {
 
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
 
-    public static final String COMMENT_URL = BASE_URL + "/posts/%1$d/comments?type=comment";
+    public static final String COMMENT_URL = BASE_URL + "posts/%1$d/comments?type=comment";
 
-    public static final String CATEGORY_URL = BASE_URL + "/recommend/%1$s?type=%2$s&limit=%3$d";
+    public static final String CATEGORY_URL = BASE_URL + "recommend/%1$s?type=%2$s&limit=%3$d";
+
+    public static final String POST_DETAIL_URL = BASE_URL + "posts/%1$d"; // post id
+
+    public static final String EXIF_DETAIL_URL = BASE_URL + "images/%1$d/exif";  // image id
+
+    public static final String EXIF_URL = BASE_URL_OLD + "post/get-post/?img_id=%1$d&post_id=%2$d";
     //endregion
 
     //region photo url

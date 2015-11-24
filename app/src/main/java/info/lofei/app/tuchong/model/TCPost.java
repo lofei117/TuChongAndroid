@@ -152,4 +152,23 @@ public class TCPost implements Serializable {
     public void setIs_favorite(final boolean is_favorite) {
         this.is_favorite = is_favorite;
     }
+
+    @Override
+    public String toString() {
+        return "TCPost{" +
+                "post_id=" + post_id +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", site_id=" + site_id +
+                ", author_id=" + author_id +
+                ", published_at='" + published_at + '\'' +
+                ", excerpt='" + excerpt + '\'' +
+                ", favorites=" + favorites +
+                ", comments=" + comments +
+                ", title='" + title + '\'' +
+                ", image_count=" + image_count +
+                ", images=" + images +
+                ", is_favorite=" + is_favorite +
+                '}';
+    }
 }

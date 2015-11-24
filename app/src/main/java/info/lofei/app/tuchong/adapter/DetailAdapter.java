@@ -41,6 +41,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
     private List<TCComment> mCommentList;
 
+    private OnImageLongClickListener mOnImageLongClickListener;
+
     public DetailAdapter(final Context context, final TCPost post) {
         mPost = post;
         mContext = context;
@@ -101,6 +103,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         return mCommentList == null ? 0 : mCommentList.size();
     }
 
+    public void setOnImageLongClickListener(OnImageLongClickListener onImageLongClickListener) {
+        mOnImageLongClickListener = onImageLongClickListener;
+    }
+
     abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         public BaseViewHolder(final View itemView) {
@@ -127,7 +133,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         void bindData(final int position) {
             if (mPost.getTitle().isEmpty()) {
                 title.setVisibility(View.GONE);
-            } else if (mPost.getExcerpt().isEmpty()){
+            } else if (mPost.getExcerpt().isEmpty()) {
                 excerpt.setVisibility(View.GONE);
                 title.setText(mPost.getTitle());
             }
@@ -194,7 +200,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 //            } else {
 //                ViewCompat.setTransitionName(image, null);
 //            }
-            if       (mPost.getType().equalsIgnoreCase(TCPost.TEXT)) {
+            if (mPost.getType().equalsIgnoreCase(TCPost.TEXT)) {
                 title.setText(mPost.getTitle());
                 excerpt.setText(mPost.getExcerpt());
                 title.setVisibility(View.VISIBLE);
@@ -203,7 +209,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 title.setVisibility(View.GONE);
                 excerpt.setVisibility(View.GONE);
             }
-            TCImage tcImage = mPost.getImages().get(position - getHeaderCount());
+            final TCImage tcImage = mPost.getImages().get(position - getHeaderCount());
             final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthor_id(), tcImage.getImg_id());
             RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
 
@@ -222,13 +228,20 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 }
             });
 
-            image.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(final View v) {
-                    Toast.makeText(v.getContext(), "get exif data", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
+            if (mOnImageLongClickListener != null) {
+                image.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        return mOnImageLongClickListener.onLongClick(v,  tcImage.getImg_id(), mPost.getPost_id());
+                    }
+                });
+            }
         }
     }
+
+    public interface OnImageLongClickListener {
+
+        boolean onLongClick(View view, long imageId, long postId);
+    }
+
 }

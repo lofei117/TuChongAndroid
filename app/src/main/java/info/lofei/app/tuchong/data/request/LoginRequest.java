@@ -3,7 +3,6 @@ package info.lofei.app.tuchong.data.request;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 
@@ -13,7 +12,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import info.lofei.app.tuchong.data.request.result.LoginResult;
+import info.lofei.app.tuchong.model.result.LoginResult;
 
 /**
  * 登录请求.

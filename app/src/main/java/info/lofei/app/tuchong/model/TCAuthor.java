@@ -93,4 +93,18 @@ public class TCAuthor {
     public void setFollwerCount(final int follwerCount) {
         this.follwerCount = follwerCount;
     }
+
+    @Override
+    public String toString() {
+        return "TCAuthor{" +
+                "siteId=" + siteId +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", domain='" + domain + '\'' +
+                ", url='" + url + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
+                ", description='" + description + '\'' +
+                ", follwerCount=" + follwerCount +
+                '}';
+    }
 }
