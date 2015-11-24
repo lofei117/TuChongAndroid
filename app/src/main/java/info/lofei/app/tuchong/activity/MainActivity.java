@@ -191,20 +191,23 @@ public class MainActivity extends BaseActivity {
                                 launchMainFragment();
                                 break;
                             default:
-                                String category = menuItem.getTitle().toString();
-                                if (mCategoryFragment == null || !mCategoryFragment.isVisible()) {
-                                    mCategoryFragment = CategoryFragment.newInstance(category);
-                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.fragment_container, mCategoryFragment).commitAllowingStateLoss();
-                                } else {
-                                    mCategoryFragment.setCategory(category);
-                                }
+                                showCategoryFragment(menuItem.getTitle().toString());
 
                                 break;
                         }
                         return true;
                     }
                 });
+    }
+
+    public void showCategoryFragment(String category) {
+        if (mCategoryFragment == null || !mCategoryFragment.isVisible()) {
+            mCategoryFragment = CategoryFragment.newInstance(category);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, mCategoryFragment).commitAllowingStateLoss();
+        } else {
+            mCategoryFragment.setCategory(category);
+        }
     }
 
     public void launchMainFragment() {
