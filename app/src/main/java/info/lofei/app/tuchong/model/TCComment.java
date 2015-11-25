@@ -43,6 +43,8 @@ public class TCComment {
     @SerializedName("reply_to")
     private List<TCAuthor> replyTo;
 
+    private TCImage image;
+
     private TCAuthor author;
 
     public long getNoteId() {
@@ -147,5 +149,13 @@ public class TCComment {
 
     public void setAuthor(final TCAuthor author) {
         this.author = author;
+    }
+
+    public TCImage getImage() {
+        return image;
+    }
+
+    public void setImage(TCImage image) {
+        this.image = image;
     }
 }

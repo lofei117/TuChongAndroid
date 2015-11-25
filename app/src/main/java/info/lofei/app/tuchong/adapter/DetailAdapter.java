@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -19,8 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -154,7 +155,19 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         }
 
         private void setText(TextView textView, String str){
-            textView.setText(str);
+            if(TextUtils.isEmpty(str)){
+                textView.setVisibility(View.GONE);
+                return;
+            }
+            Spanned spannable;
+            try{
+                spannable = Html.fromHtml(str);
+            }catch (Exception e){
+                //
+                spannable = new SpannedString(str);
+            }
+
+            textView.setText(spannable);
             textView.setVisibility(TextUtils.isEmpty(str) ? View.GONE : View.VISIBLE);
         }
 
@@ -170,7 +183,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
             setText(postTitle, mPost.getTitle());
             setText(postExcerpt, mPost.getParsedContent());
-            setText(postExcerpt, mPost.getExcerpt());
+            if(mPost.getParsedContent() == null){
+                setText(postExcerpt, mPost.getExcerpt());
+            }
 
             if(mPost.getTags() != null && !mPost.getTags().isEmpty()){
 
@@ -234,7 +249,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 postAuthorAvatar.setVisibility(View.GONE);
             }
 
-            postExcerpt.setText(mPost.getExcerpt());
         }
     }
 
@@ -252,6 +266,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Bind(R.id.tv_comment_time)
         TextView time;
 
+        @Bind(R.id.the_comment_image)
+        ImageView theCommentimageView;
+
         public CommentViewHolder(final View itemView) {
             super(itemView);
         }
@@ -268,8 +285,22 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 } else {
                     author.setText(mContext.getString(R.string.reply_to, tcAuthor.getName(), tcComment.getReplyTo().get(0).getName()));
                 }
-                comment.setText(tcComment.getContent());
+                Spanned spannable;
+                try{
+                    spannable = Html.fromHtml(tcComment.getContent());
+                }catch (Exception e){
+                    spannable = new SpannedString(tcComment.getContent());
+                }
+                comment.setText(spannable);
                 time.setText(tcComment.getCreatedAt());
+                if(tcComment.getImage() != null){
+                    String url = String.format(TuChongApi.PHOTO_URL_SMALL, tcComment.getImage().getUser_id(),
+                            tcComment.getImage().getImg_id());
+                    RequestManager.loadImage(url, RequestManager.getImageListener(theCommentimageView, null, null));
+                    theCommentimageView.setVisibility(View.VISIBLE);
+                }else{
+                    theCommentimageView.setVisibility(View.GONE);
+                }
             }
         }
     }
