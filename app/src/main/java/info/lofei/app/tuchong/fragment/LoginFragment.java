@@ -1,5 +1,9 @@
 package info.lofei.app.tuchong.fragment;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,21 +17,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import info.lofei.app.tuchong.BaseApplication;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.data.request.CaptchaRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
-import info.lofei.app.tuchong.data.request.result.Captcha;
-import info.lofei.app.tuchong.data.request.result.LoginResult;
+import info.lofei.app.tuchong.model.result.Captcha;
+import info.lofei.app.tuchong.model.result.LoginResult;
 import info.lofei.app.tuchong.utils.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 

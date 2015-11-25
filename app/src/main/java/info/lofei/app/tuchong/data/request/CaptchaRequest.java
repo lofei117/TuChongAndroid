@@ -5,10 +5,9 @@ import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import info.lofei.app.tuchong.data.request.result.Captcha;
+import info.lofei.app.tuchong.model.result.Captcha;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**

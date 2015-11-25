@@ -158,4 +158,23 @@ public class TCComment {
     public void setImage(TCImage image) {
         this.image = image;
     }
+    
+    @Override
+    public String toString() {
+        return "TCComment{" +
+                "noteId=" + noteId +
+                ", postId=" + postId +
+                ", type='" + type + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", delete=" + delete +
+                ", reply=" + reply +
+                ", authorId=" + authorId +
+                ", anonymous=" + anonymous +
+                ", likeCount=" + likeCount +
+                ", liked=" + liked +
+                ", replyTo=" + replyTo +
+                ", author=" + author +
+                '}';
+    }
 }
