@@ -4,14 +4,22 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -19,6 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.ImageActivity;
+import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.model.TCAuthor;
 import info.lofei.app.tuchong.model.TCComment;
@@ -133,6 +142,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Bind(R.id.tv_excerpt)
         TextView postExcerpt;
 
+        @Bind(R.id.post_tags)
+        TextView postTags;
+
         @Bind(R.id.iv_avatar)
         ImageView postAuthorAvatar;
 
@@ -164,6 +176,44 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             setText(postTitle, mPost.getTitle());
             setText(postExcerpt, mPost.getParsedContent());
             setText(postExcerpt, mPost.getExcerpt());
+
+            if(mPost.getTags() != null && !mPost.getTags().isEmpty()){
+
+                String tagsString = mPost.getTags().toString();
+                setText(postTags, tagsString);
+                SpannableStringBuilder style = new SpannableStringBuilder(tagsString);
+
+                for(final String tag: mPost.getTags()){
+                    if(TextUtils.isEmpty(tag)){
+                        continue;
+                    }
+
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                        }
+
+                        @Override
+                        public void onClick(View widget) {
+                            Toast.makeText(widget.getContext(), tag, Toast.LENGTH_SHORT).show();
+                            if(mContext != null && mContext instanceof Activity){
+                                ((MainActivity)mContext).showCategoryFragment(tag);
+                            }
+                        }
+                    };
+                    //CAPA2016年1月“人文小品篇\"影赛征稿
+                    int idx = tagsString.indexOf(tag);
+
+                    style.setSpan(clickableSpan, idx, idx + tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                }
+
+                postTags.setText(style);
+                postTags.setHighlightColor(Color.TRANSPARENT);
+                postTags.setMovementMethod(LinkMovementMethod.getInstance());
+            }
 
             postPublishedAt.setText(mPost.getPublished_at());
             TCAuthor author = mPost.getAuthor();

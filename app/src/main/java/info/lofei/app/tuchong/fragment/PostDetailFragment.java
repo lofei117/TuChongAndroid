@@ -101,7 +101,9 @@ public class PostDetailFragment extends BaseFragment {
                         @Override
                         public void onResponse(TCPost response) {
                             if (response != null) {
-                                mTCPost = response;
+                                mTCPost.setAuthor(response.getAuthor());
+                                mTCPost.setTags(response.getTags());
+                                mTCPost.setParsedContent(response.getParsedContent());
                                 mAdapter.notifyDataSetChanged();
                             }
                         }
