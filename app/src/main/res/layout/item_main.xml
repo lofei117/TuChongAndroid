@@ -30,14 +30,32 @@
 
         </info.lofei.app.tuchong.widget.FixedAspectRatioView>
 
-        <TextView
-            android:id="@+id/tv_title"
+        <RelativeLayout android:id="@+id/title_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Friends"
-            android:textColor="#444444"
-            style="@style/Widget.Wizard.Title" />
+            >
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friends"
+                android:textColor="#444444"
+                android:layout_centerVertical="true"
+                style="@style/Widget.Wizard.Title" />
+            <TextView
+                android:id="@+id/tv_image_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tv_title"
+                android:text="@string/item_image_count"
+                style="@style/Widget.Wizard.Title"
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                android:paddingBottom="10dp"
+                android:gravity="bottom"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

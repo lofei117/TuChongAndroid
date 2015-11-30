@@ -132,9 +132,7 @@ POST
         },
         parsedContent:"有些雾霾，云彩也不够多，不过好歹是出去拍了。",
         views:14,
-        flags:[
-
-        ],
+        flags:[],
         privileges:{
             edit:true,
             delete:true,

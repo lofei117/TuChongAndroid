@@ -50,6 +50,8 @@ public class MainFragment extends BaseFragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     //#endregion
 
+    private boolean isLoadFinished;
+
     private MainActivity mMainActivity;
 
     private MainAdapter mAdapter;
@@ -97,6 +99,18 @@ public class MainFragment extends BaseFragment {
             mAdapter = new MainAdapter(mMainActivity);
         }
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if(linearLayoutManager.getItemCount() - linearLayoutManager.findLastCompletelyVisibleItemPosition() < Constant.PAGE_COUNT / 2
+                        && !isLoadFinished){
+                    loadData(false);
+                }
+
+            }
+        });
     }
 
     private void setupFloatActionButton() {
@@ -141,7 +155,9 @@ public class MainFragment extends BaseFragment {
                     mTCActivitiesList.addAll(response);
                     mAdapter.notifyDataSetChanged();
                     mSwipeRefreshLayout.setRefreshing(false);
-
+                }
+                if(response == null && response.isEmpty()){
+                    isLoadFinished = true;
                 }
             }
         }, new Response.ErrorListener() {

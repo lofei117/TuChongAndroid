@@ -299,7 +299,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 comment.setText(spannable);
                 time.setText(tcComment.getCreatedAt());
                 if(tcComment.getImage() != null){
-                    String url = String.format(TuChongApi.PHOTO_URL_SMALL, tcComment.getImage().getUser_id(),
+                    String url = String.format(TuChongApi.PHOTO_URL_MEDIUM, tcComment.getImage().getUser_id(),
                             tcComment.getImage().getImg_id());
                     RequestManager.loadImage(url, RequestManager.getImageListener(theCommentimageView, null, null));
                     theCommentimageView.setVisibility(View.VISIBLE);

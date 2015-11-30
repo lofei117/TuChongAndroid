@@ -158,7 +158,7 @@ public class TCComment {
     public void setImage(TCImage image) {
         this.image = image;
     }
-    
+
     @Override
     public String toString() {
         return "TCComment{" +

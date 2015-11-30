@@ -70,6 +70,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         @Bind(R.id.tv_title)
         TextView title;
 
+        @Bind(R.id.tv_image_count)
+        TextView imageCount;
+
         @Bind(R.id.tv_like_count)
         TextView like_count;
 
@@ -91,14 +94,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 if (site != null) {
                     author_name.setText(site.getName());
                 }
+                image.setImageResource(0);
                 title.setText(post.getTitle());
                 like_count.setText(String.valueOf(post.getFavorites()));
                 comment_count.setText(String.valueOf(post.getComments()));
-                if (post.getImage_count() > 0) {
+                int imgCount = post.getImage_count();
+                if (imgCount > 0) {
                     TCImage tcImage = post.getImages().get(0);
                     String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthor_id(), tcImage.getImg_id());
                     RequestManager.loadImage(url, RequestManager.getImageListener(image, null, mFailedDrawable));
                 }
+                if(imgCount > 1){
+                    imageCount.setText(mContext.getString(R.string.item_image_count, imgCount));
+                    imageCount.setVisibility(View.VISIBLE);
+                }else{
+                    imageCount.setVisibility(View.GONE);
+                }
+
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {

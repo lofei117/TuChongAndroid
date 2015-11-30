@@ -59,6 +59,7 @@ public class CategoryFragment extends BaseFragment {
     private List<TCPost> mTCPostList;
 
     private String mCategory;
+    private boolean isLoadFinished;
 
     public static CategoryFragment newInstance(String category) {
         CategoryFragment fragment = new CategoryFragment();
@@ -109,6 +110,21 @@ public class CategoryFragment extends BaseFragment {
             mAdapter = new CategoryAdapter(mMainActivity);
         }
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutmanger = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if(layoutmanger.getItemCount() - layoutmanger.findLastCompletelyVisibleItemPosition() <= Constant.PAGE_COUNT /2 && !isLoadFinished){
+                   loadData(false);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
     }
 
     private void setupFloatActionButton() {
@@ -149,6 +165,7 @@ public class CategoryFragment extends BaseFragment {
 
     private void loadData(final boolean isRefresh) {
         if (isRefresh) {
+            isLoadFinished = false;
             mSwipeRefreshLayout.setRefreshing(true);
             mTCPostList.clear();
         }
@@ -160,6 +177,9 @@ public class CategoryFragment extends BaseFragment {
                     mTCPostList.addAll(response);
                     mAdapter.notifyDataSetChanged();
                     mSwipeRefreshLayout.setRefreshing(false);
+                }
+                if(response == null || response.isEmpty()){
+                    isLoadFinished = true;
                 }
             }
         }, new Response.ErrorListener() {

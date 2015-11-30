@@ -8,12 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -24,6 +27,7 @@ import info.lofei.app.tuchong.adapter.DetailAdapter;
 import info.lofei.app.tuchong.data.request.GetComments;
 import info.lofei.app.tuchong.data.request.GetPostDetail;
 import info.lofei.app.tuchong.data.request.GetExif;
+import info.lofei.app.tuchong.data.request.PostComment;
 import info.lofei.app.tuchong.model.TCComment;
 import info.lofei.app.tuchong.model.TCExif;
 import info.lofei.app.tuchong.model.TCPost;
@@ -38,13 +42,19 @@ import static com.android.volley.Response.*;
  * @version 1.0.0
  *          created at: 2015-07-08 11:11
  */
-public class PostDetailFragment extends BaseFragment {
+public class PostDetailFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = PostDetailFragment.class.getSimpleName();
     private static String BUNDLE_ARG_POST = "bundle_arg_post";
 
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
+
+    @Bind(R.id.btn_add_comment)
+    Button addCommentButton;
+
+    @Bind(R.id.et_comment_content)
+    EditText etCommentContent;
 
     private TCPost mTCPost;
 
@@ -88,6 +98,7 @@ public class PostDetailFragment extends BaseFragment {
 
             ButterKnife.bind(this, view);
             setupRecyclerView();
+            addCommentButton.setOnClickListener(this);
         }
         return view;
     }
@@ -176,5 +187,35 @@ public class PostDetailFragment extends BaseFragment {
 
             }
         }));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_add_comment:
+                String context = etCommentContent.getText().toString();
+                etCommentContent.setText(null);
+
+                String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPost_id());
+                HashMap<String, String> map = new HashMap<>();
+                map.put("format","json");
+                map.put("content",context);
+                map.put("post_id","" + mTCPost.getPost_id());
+                //map.put("group_id","json");
+                executeRequest(new PostComment(url, map, new Response.Listener<TCComment>() {
+
+                    @Override
+                    public void onResponse(TCComment response) {
+                        loadCommentListData();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }));
+                break;
+        }
     }
 }

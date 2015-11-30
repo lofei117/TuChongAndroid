@@ -25,4 +25,5 @@
     <string name="title_settings">设置</string>
     <string name="str_drawer_following">%d\n 关注</string>
     <string name="str_drawer_follower">%d\n  关注者</string>
+    <string name="item_image_count">%d张</string>
 </resources>
