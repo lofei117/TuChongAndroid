@@ -16,10 +16,13 @@ import butterknife.Bind;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.RequestManager;
+import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.model.TCActivity;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
+import info.lofei.app.tuchong.utils.NumberUtil;
+import info.lofei.app.tuchong.utils.PreferenceUtil;
 import info.lofei.app.tuchong.utils.SitesMapCache;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -92,6 +95,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         public void bindData(final TCActivity activity) {
             if (activity != null) {
                 final TCPost post = activity.getPost();
+                List<Long> ids = activity.getSite_id_array();
+                boolean isFavorited = ids != null && ids.contains(NumberUtil.toLong(
+                        PreferenceUtil.getString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID,"")));
+                post.setIs_favorite(isFavorited);
+
                 TCSite site = SitesMapCache.getSite(post.getAuthor_id());
                 if (site != null) {
                     author_name.setText(site.getName());

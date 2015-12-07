@@ -60,6 +60,9 @@
         <activity android:name=".activity.SettingsActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.PostDetailActivity"
+            android:screenOrientation="portrait"
+            />
 
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->

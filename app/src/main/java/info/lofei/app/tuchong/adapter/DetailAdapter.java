@@ -18,7 +18,9 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,8 +41,6 @@ import info.lofei.app.tuchong.model.TCSite;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
- * TODO comment here.
- *
  * @author lofei lofei@lofei.info
  * @version 1.0.0
  *          created at: 2015-07-08 13:38
@@ -55,6 +55,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     private List<TCComment> mCommentList;
 
     private OnImageLongClickListener mOnImageLongClickListener;
+
+    private OnCommentButtonClickListener mOnCommentButtonClickListener;
+
+    private OnLikeButtonClickListener mOnLikeButtonClickListener;
+
+    private OnCommentItemClickListener mOnCommentItemClickListener;
 
     public DetailAdapter(final Context context, final TCPost post) {
         mPost = post;
@@ -124,6 +130,18 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
     public void setOnImageLongClickListener(OnImageLongClickListener onImageLongClickListener) {
         mOnImageLongClickListener = onImageLongClickListener;
+    }
+
+    public void setOnCommentItemClick(OnCommentItemClickListener  onCommentItemClickListener){
+        mOnCommentItemClickListener = onCommentItemClickListener;
+    }
+
+    public void setOnCommentButtonClickListener(OnCommentButtonClickListener onCommentClickListener){
+        mOnCommentButtonClickListener = onCommentClickListener;
+    }
+
+    public void setmOnLikeButtonClickListener(OnLikeButtonClickListener onLikeClickListener){
+        mOnLikeButtonClickListener = onLikeClickListener;
     }
 
     abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -281,8 +299,20 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Override
         void bindData(int position) {
             position -= (getHeaderCount() + getImageCount());
-            TCComment tcComment = mCommentList.get(position);
+            final TCComment tcComment = mCommentList.get(position);
             if (tcComment != null) {
+                if(itemView != null){
+                    itemView.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(mOnCommentItemClickListener != null){
+                                TCAuthor tcAuthor = tcComment.getAuthor();
+                                mOnCommentItemClickListener.onItemClick(tcComment.getAuthorId(),
+                                        tcAuthor == null ? "" : tcAuthor.getName());
+                            }
+                        }
+                    });
+                }
                 TCAuthor tcAuthor = tcComment.getAuthor();
                 RequestManager.loadImage(tcAuthor.getIconUrl(), RequestManager.getImageListener(avatar, null, null));
                 if (tcComment.getReplyTo() == null || tcComment.getReplyTo().isEmpty()) {
@@ -315,6 +345,15 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Bind(R.id.iv_photo_layout)
         ViewGroup imageLayout;
 
+        @Bind(R.id.do_some_to_post)
+        View doSomeToPostView;
+
+        @Bind(R.id.like_post_button)
+        Button likePostButton;
+
+        @Bind(R.id.comment_post_button)
+        Button commentPostButton;
+
         @Bind(R.id.left_photo_view)
         ImageView leftPhotoView;
 
@@ -341,6 +380,32 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
             if (mPost.getImages() == null || mPost.getImages().isEmpty()) {
                 return;
+            }
+
+            likePostButton.setText(mPost.is_favorite() ? R.string.post_has_liked :  R.string.post_like);
+
+            doSomeToPostView.setVisibility(View.GONE);
+
+            if(position > getImageCount() - 1){
+                doSomeToPostView.setVisibility(View.VISIBLE);
+                likePostButton.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnLikeButtonClickListener != null) {
+                            boolean isLiked = !mContext.getResources().getString(R.string.post_like).equalsIgnoreCase(likePostButton.getText().toString());
+                            mOnLikeButtonClickListener.onLikeButtonClick(likePostButton,isLiked);
+                        }
+                    }
+                });
+                commentPostButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mOnCommentButtonClickListener != null){
+                            mOnCommentButtonClickListener.onCommentButtonClick();
+                        }
+                    }
+                });
             }
 
             int baseItemIdx = (position - getHeaderCount()) * ITEM_COUNT_IN_ONE_LINE;
@@ -379,7 +444,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                         tcImage.getImg_id());
                 RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
 
-                image.setOnClickListener(new View.OnClickListener() {
+                image.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(final View v) {
                         Intent intent = new Intent(mContext, ImageActivity.class);
@@ -394,7 +459,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                         }
                     }
                 });
-
 
                 if (mOnImageLongClickListener != null) {
                     image.setOnLongClickListener(new View.OnLongClickListener() {
@@ -413,5 +477,18 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
         boolean onLongClick(View view, long imageId, long postId);
     }
+
+    public interface  OnCommentItemClickListener{
+        boolean onItemClick(long authorUserId, String authorUserName);
+    }
+
+    public interface OnCommentButtonClickListener{
+        boolean onCommentButtonClick();
+    }
+
+    public interface OnLikeButtonClickListener{
+        boolean onLikeButtonClick(View view,boolean isLiked);
+    }
+
 
 }

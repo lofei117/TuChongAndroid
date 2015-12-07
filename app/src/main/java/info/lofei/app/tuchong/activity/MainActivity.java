@@ -223,29 +223,30 @@ public class MainActivity extends BaseActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void launchDetailFragment(final TCPost tcPost, final View view) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        PostDetailFragment fragment = PostDetailFragment.newInstance(tcPost);
+        PostDetailActivity.launch(this, tcPost);
+        //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        //PostDetailFragment fragment = PostDetailFragment.newInstance(tcPost);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide slide = new Slide(Gravity.BOTTOM);
-            slide.setDuration(200);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Slide slide = new Slide(Gravity.BOTTOM);
+//            slide.setDuration(200);
+//
+//            ChangeBounds changeBounds = new ChangeBounds();
+//            changeBounds.setDuration(200);
+//
+//            fragment.setEnterTransition(slide);
+//            fragment.setAllowEnterTransitionOverlap(true);
+//            fragment.setAllowReturnTransitionOverlap(true);
+//            fragment.setSharedElementEnterTransition(changeBounds);
+//            String transitionName = getString(R.string.transition_image);
+//            Log.d("test", transitionName);
+////            view.setTransitionName(transitionName);
+////            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
+////            fragmentTransaction.addSharedElement(view, transitionName);
+////            supportPostponeEnterTransition();
+//        }
 
-            ChangeBounds changeBounds = new ChangeBounds();
-            changeBounds.setDuration(200);
-
-            fragment.setEnterTransition(slide);
-            fragment.setAllowEnterTransitionOverlap(true);
-            fragment.setAllowReturnTransitionOverlap(true);
-            fragment.setSharedElementEnterTransition(changeBounds);
-            String transitionName = getString(R.string.transition_image);
-            Log.d("test", transitionName);
-//            view.setTransitionName(transitionName);
-//            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
-//            fragmentTransaction.addSharedElement(view, transitionName);
-//            supportPostponeEnterTransition();
-        }
-
-        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(PostDetailFragment.class.getSimpleName()).commitAllowingStateLoss();
+        //fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(PostDetailFragment.class.getSimpleName()).commitAllowingStateLoss();
 //        mActionBarDrawerToggle.onDrawerSlide(null, 0.5f);
 //        getSupportFragmentManager().executePendingTransactions();
     }
