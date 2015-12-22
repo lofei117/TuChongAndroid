@@ -46,7 +46,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
         //判断是否存在user id。
         if(TextUtils.isEmpty(PreferenceUtil.getString(
                 LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, ""))){
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, RegLoginActivity.class));
         }else{
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

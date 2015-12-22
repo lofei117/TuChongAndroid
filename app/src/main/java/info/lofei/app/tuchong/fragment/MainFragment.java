@@ -43,9 +43,6 @@ public class MainFragment extends BaseFragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.fab)
-    FloatingActionButton mFloatingActionButton;
-
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     //#endregion
@@ -70,7 +67,6 @@ public class MainFragment extends BaseFragment {
             view = inflater.inflate(R.layout.fragment_main, container, false);
             ButterKnife.bind(this, view);
 
-            setupFloatActionButton();
             setupRecyclerView();
             setupSwipeRefreshLayout();
 
@@ -109,16 +105,6 @@ public class MainFragment extends BaseFragment {
                     loadData(false);
                 }
 
-            }
-        });
-    }
-
-    private void setupFloatActionButton() {
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
     }

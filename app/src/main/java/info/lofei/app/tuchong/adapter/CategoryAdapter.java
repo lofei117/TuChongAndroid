@@ -15,6 +15,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
+import info.lofei.app.tuchong.activity.PostDetailActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
@@ -114,9 +115,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        if (mContext instanceof MainActivity) {
-                            ((MainActivity) mContext).launchDetailFragment(post, image);
-                        }
+                        PostDetailActivity.launch(v.getContext(), post);
                     }
                 });
             }

@@ -44,6 +44,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         setSupportActionBar(mToolbar);
 
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mLogoutBtn.setOnClickListener(this);
         mCleanCache.setOnClickListener(this);
     }
@@ -59,12 +67,12 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                             public void onResponse(LogoutResult response) {
                                 AppManager.getInstance().finishAllActivitis();
                                 startActivity(new Intent(SettingsActivity.this,
-                                        LoginActivity.class));
+                                        RegLoginActivity.class));
                                 if (response != null && "SUCCESS".equalsIgnoreCase(response.getResult())) {
                                     //// leave blank
 
                                 } else {
-                                    Toast.makeText(SettingsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, R.string.logout_failed, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }, null));

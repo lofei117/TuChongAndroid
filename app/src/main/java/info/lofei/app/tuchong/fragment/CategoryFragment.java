@@ -5,24 +5,31 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.activity.LoginActivity;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.adapter.CategoryAdapter;
+import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.data.request.GetCategoryPosts;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.utils.Constant;
@@ -45,14 +52,11 @@ public class CategoryFragment extends BaseFragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.fab)
-    FloatingActionButton mFloatingActionButton;
-
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     //#endregion
 
-    private MainActivity mMainActivity;
+    private Activity mMainActivity;
 
     private CategoryAdapter mAdapter;
 
@@ -82,7 +86,6 @@ public class CategoryFragment extends BaseFragment {
             view = inflater.inflate(R.layout.fragment_main, container, false);
             ButterKnife.bind(this, view);
 
-            setupFloatActionButton();
             setupRecyclerView();
             setupSwipeRefreshLayout();
 
@@ -94,7 +97,7 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        mMainActivity = (MainActivity) activity;
+        mMainActivity = activity;
     }
 
     @Override
@@ -115,24 +118,14 @@ public class CategoryFragment extends BaseFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutmanger = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if(layoutmanger.getItemCount() - layoutmanger.findLastCompletelyVisibleItemPosition() <= Constant.PAGE_COUNT /2 && !isLoadFinished){
-                   loadData(false);
+                if (layoutmanger.getItemCount() - layoutmanger.findLastCompletelyVisibleItemPosition() <= Constant.PAGE_COUNT / 2 && !isLoadFinished) {
+                    loadData(false);
                 }
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-    }
-
-    private void setupFloatActionButton() {
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
     }
@@ -169,7 +162,16 @@ public class CategoryFragment extends BaseFragment {
             mSwipeRefreshLayout.setRefreshing(true);
             mTCPostList.clear();
         }
-        String url = String.format(TuChongApi.CATEGORY_URL, mCategory, isRefresh ? "last" : "next", Constant.PAGE_COUNT);
+
+        String categoryEncode = null;
+        try {
+            categoryEncode = URLEncoder.encode(mCategory, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = String.format(TuChongApi.CATEGORY_URL, categoryEncode , isRefresh ? "last" : "next", Constant.PAGE_COUNT);
+
         executeRequest(new GetCategoryPosts(url, new Response.Listener<List<TCPost>>() {
             @Override
             public void onResponse(final List<TCPost> response) {
@@ -188,7 +190,9 @@ public class CategoryFragment extends BaseFragment {
                 if (!isDetached()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                     if (error instanceof AuthFailureError) {
-                        mMainActivity.loginRequired();
+                        RequestManager.cancelAll(this);
+                        AppManager.getInstance().finishAllActivitis();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
                 }
             }

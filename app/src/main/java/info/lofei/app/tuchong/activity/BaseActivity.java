@@ -1,8 +1,10 @@
 package info.lofei.app.tuchong.activity;
 
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.SurfaceView;
 
 import com.android.volley.Request;
 

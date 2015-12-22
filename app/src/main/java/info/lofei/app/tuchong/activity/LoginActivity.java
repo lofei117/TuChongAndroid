@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.BaseApplication;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.data.request.CaptchaRequest;
@@ -33,7 +36,7 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
 /**
  * Created by jerrysher on 11/18/15.
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity{
 
     @Bind(R.id.et_username)
     EditText mUserNameEditText;
@@ -53,6 +56,10 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.captcha_input)
     EditText mCaptchaEditText;
 
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+
+
     private Captcha mGetCaptcha;
 
     @Override
@@ -60,6 +67,26 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    @OnClick(R.id.info)
+    void onClickInfo(){
+        WebViewActivity.launch(this, "file:///android_asset/html/about_image_info.html");
+    }
+
+    @OnClick(R.id.forgot_pwd_button)
+    void forgotPwd(){
+        WebViewActivity.WebLaunchConfig  config = new WebViewActivity.WebLaunchConfig("http://tuchong.com/account/forget/", "忘记密码");
+        config.setNetTitleEnable(true);
+        WebViewActivity.launch(this,config);
     }
 
     @OnClick(R.id.btn_login)
@@ -92,7 +119,7 @@ public class LoginActivity extends BaseActivity {
                     case LoginResult.CODE_SUCCESS:
                         //保存用户id
                         PreferenceUtil.putString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, response.getId());
-                        finish();
+                        AppManager.getInstance().finishAllActivitis();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         break;
                     case LoginResult.CODE_PWD_OR_NAME_ERROR:

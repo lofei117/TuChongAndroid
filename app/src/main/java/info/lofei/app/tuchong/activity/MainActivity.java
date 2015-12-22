@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity {
     public void loginRequired() {
         RequestManager.cancelAll(this);
         AppManager.getInstance().finishAllActivitis();
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, RegLoginActivity.class));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

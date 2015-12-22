@@ -18,6 +18,8 @@ public class TuChongApi {
 
     private static final String V1_BASE_URL = "http://tuchong.com/api/";
 
+    public static final String RESET_PWD = BASE_URL + "password";
+
     public static final String ACTIVITY_LIST_URL = BASE_URL + "users/self/activities?count=%1$d&offset=%2$d";
 
     public static final String SITE_URL = V1_BASE_URL + "site/get/?site_id=%1$s";

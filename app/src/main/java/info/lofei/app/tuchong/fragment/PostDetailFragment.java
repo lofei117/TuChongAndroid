@@ -298,6 +298,9 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
     private void loadCommentListData() {
         mCommentList.clear();
+        if(mTCPost == null){
+            return;
+        }
         String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPost_id());
         executeRequest(new GetComments(url, new Listener<List<TCComment>>() {
             @Override

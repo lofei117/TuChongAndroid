@@ -1,7 +1,5 @@
 package info.lofei.app.tuchong.data.request.result;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by jerrysher on 11/16/15.
  */
@@ -15,5 +13,10 @@ public class LogoutResult {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    @Override
+    public String toString() {
+        return result;
     }
 }
