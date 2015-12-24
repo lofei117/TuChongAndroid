@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,6 +78,11 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UmengUpdateAgent.update(this);
+
+        FeedbackAgent agent = new FeedbackAgent(this);
+        agent.sync();
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -154,11 +161,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

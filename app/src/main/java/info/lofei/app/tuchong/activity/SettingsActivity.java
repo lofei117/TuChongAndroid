@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.umeng.fb.FeedbackAgent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -54,6 +55,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         mLogoutBtn.setOnClickListener(this);
         mCleanCache.setOnClickListener(this);
+        findViewById(R.id.setting_item_feedback).setOnClickListener(this);
     }
 
     @Override
@@ -80,6 +82,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
             case R.id.setting_item_clean_cache:
                 //todo clean cache.
+                break;
+            case R.id.setting_item_feedback:
+                //USER FEEDBACK
+                FeedbackAgent agent = new FeedbackAgent(this);
+                agent.startFeedbackActivity();
                 break;
         }
     }

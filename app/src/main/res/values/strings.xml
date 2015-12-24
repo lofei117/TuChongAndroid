@@ -54,5 +54,6 @@
     <string name="forgot_email_cant_got_mail">邮件没有收到怎么办？</string>
     <string name="forgot_password">忘记密码</string>
     <string name="logout_failed">退出失败</string>
+    <string name="item_feedback">建议反馈</string>
 
 </resources>

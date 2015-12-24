@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+
     <!-- 自定义权限 -->
     <permission
         android:name="getui.permission.GetuiService.info.lofei.app.tuchong"
@@ -155,6 +158,23 @@
 
 
         <!-- 个推SDK配置结束 -->
+
+        <meta-data android:value="567a9f4be0f55af9d7004804" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="jerrysher" android:name="UMENG_CHANNEL"/>
+
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <activity
+            android:name="com.umeng.fb.ConversationActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

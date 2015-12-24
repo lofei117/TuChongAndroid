@@ -4,15 +4,25 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "info.lofei.app.tuchong"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.1"
     }
     buildTypes {
         release {
+            debuggable false
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -20,7 +30,9 @@ android {
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:22'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.1'
@@ -31,4 +43,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'de.hdodenhof:circleimageview:1.3.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.umeng:fb:5.4.0'
 }
