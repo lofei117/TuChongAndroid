@@ -25,11 +25,6 @@
         android:name="getui.permission.GetuiService.info.lofei.app.tuchong"
         android:protectionLevel="normal"></permission>
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <!-- 个推SDK权限配置结束 -->
     <application
         android:name=".BaseApplication"
@@ -81,6 +76,10 @@
         <activity
             android:name=".activity.CategoryActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.AuthorShowActivity"
+            android:theme="@style/LikeDialog"/>
 
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->

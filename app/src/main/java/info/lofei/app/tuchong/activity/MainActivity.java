@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
 
         executeRequest(new GetSiteRequest(url, new Response.Listener<TCSite>() {
             @Override
-            public void onResponse(TCSite site) {
+            public void onResponse(final TCSite site) {
                 if (site != null) {
                     RequestManager.loadImage(site.getIcon(),
                             RequestManager.getImageListener(profileImageView, null, null));
@@ -115,6 +115,13 @@ public class MainActivity extends BaseActivity {
                     mFollower.setText(getString(R.string.str_drawer_follower, site.getFollowers()));
                     mFollowing.setText(getString(R.string.str_drawer_following, NumberUtil.toInt(site.getFollowing())));
                     mDescription.setText(site.getDescription());
+                    profileImageView.setOnClickListener(new View.OnClickListener(){
+
+                        @Override
+                        public void onClick(View v) {
+                            WebViewActivity.launch(v.getContext(), site.getUrl());
+                        }
+                    });
                 }
             }
         }, new Response.ErrorListener() {

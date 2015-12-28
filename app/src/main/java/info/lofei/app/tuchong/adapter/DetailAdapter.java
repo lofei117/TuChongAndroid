@@ -30,6 +30,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.activity.AuthorShowActivity;
 import info.lofei.app.tuchong.activity.CategoryActivity;
 import info.lofei.app.tuchong.activity.ImageActivity;
 import info.lofei.app.tuchong.data.RequestManager;
@@ -247,11 +248,18 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             }
 
             postPublishedAt.setText(mPost.getPublished_at());
-            TCAuthor author = mPost.getAuthor();
+            final TCAuthor author = mPost.getAuthor();
 
-            TCSite site = mPost.getSite();
+            final TCSite site = mPost.getSite();
 
             if (author != null) {
+                postAuthorAvatar.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v) {
+                        AuthorShowActivity.laucher(v.getContext(), author);
+                    }
+                });
                 postAuthorName.setText(author.getName());
                 RequestManager.loadImage(author.getIconUrl(),
                         RequestManager.getImageListener(postAuthorAvatar, null, null));
@@ -262,7 +270,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 postAuthorName.setText(site.getName());
                 RequestManager.loadImage(site.getIcon(),
                         RequestManager.getImageListener(postAuthorAvatar, null, null));
-                //postAuthorAvatar.setOnClickListener(this);
+                postAuthorAvatar.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        AuthorShowActivity.laucher(v.getContext(), site);
+                    }
+                });
             }
 
             if (author == null && site == null) {
