@@ -25,7 +25,36 @@
         <item name="colorPrimaryDark">#333333</item>
         <item name="colorAccent">#333333</item>
         <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <!--<item name="android:windowBackground">@null</item>-->
     </style>
+
+    <style name="LikeDialog"  parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorBackground">@color/window_background</item>
+        <!--<item name="android:background">#6666</item>-->
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    <!--
+    <item name="android:windowFrame">@null</item>
+        <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
+    <item name="android:windowTitleBackgroundStyle">@style/Base.DialogWindowTitleBackground.AppCompat</item>
+    <item name="android:windowBackground">@drawable/abc_dialog_material_background_dark</item>
+
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:backgroundDimEnabled">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
+    <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+
+    <item name="windowActionBar">false</item>
+    <item name="windowActionModeOverlay">true</item>
+    <item name="listPreferredItemPaddingLeft">24dip</item>
+    <item name="listPreferredItemPaddingRight">24dip</item>
+
+    <item name="android:listDivider">@null</item>
+    -->
 
 
     <style name="Widget" />
