@@ -17,6 +17,7 @@ import info.lofei.app.tuchong.model.TCPost;
  * Created by jerrysher on 15/12/7.
  */
 public class PostDetailActivity extends BaseActivity{
+
     public static final String EXTRA_TCPOST_SENT_BY_INTENT = "extra_tcpost_sent_by_intent";
 
     @Bind(R.id.toolbar)

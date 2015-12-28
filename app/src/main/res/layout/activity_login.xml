@@ -26,7 +26,7 @@
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="@string/title_settings" />
+                app:title="@string/title_activity_login" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -54,7 +54,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />
 

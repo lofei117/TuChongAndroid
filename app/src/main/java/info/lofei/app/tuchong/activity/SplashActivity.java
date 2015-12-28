@@ -16,23 +16,26 @@ import info.lofei.app.tuchong.utils.PreferenceUtil;
 /**
  * Created by jerrysher on 11/18/15.
  */
-public class SplashActivity extends BaseActivity implements Animation.AnimationListener{
-    private AlphaAnimation alphaAnimation;
+public class SplashActivity extends BaseActivity implements Animation.AnimationListener {
+
+    private AlphaAnimation mAlphaAnimation;
 
     @Bind(R.id.root_view)
-    View rootView;
+    View mRootView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
-        alphaAnimation = new AlphaAnimation(1.0f, 0.3f);
-        alphaAnimation.setDuration(3000);
-        alphaAnimation.setAnimationListener(this);
-        alphaAnimation.startNow();
+        mAlphaAnimation = new AlphaAnimation(1.0f, 0.3f);
+        mAlphaAnimation.setDuration(3000);
+        mAlphaAnimation.setAnimationListener(this);
+        mAlphaAnimation.startNow();
+        mAlphaAnimation.setFillAfter(true);
 
-        rootView.setAnimation(alphaAnimation);
+        mRootView.setAnimation(mAlphaAnimation);
     }
 
     @Override
@@ -44,10 +47,10 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
     public void onAnimationEnd(Animation animation) {
         finish();
         //判断是否存在user id。
-        if(TextUtils.isEmpty(PreferenceUtil.getString(
-                LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, ""))){
+        if (TextUtils.isEmpty(PreferenceUtil.getString(
+                LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, ""))) {
             startActivity(new Intent(this, RegLoginActivity.class));
-        }else{
+        } else {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

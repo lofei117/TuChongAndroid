@@ -32,8 +32,6 @@ import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.CategoryActivity;
 import info.lofei.app.tuchong.activity.ImageActivity;
-import info.lofei.app.tuchong.activity.MainActivity;
-import info.lofei.app.tuchong.activity.PostDetailActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.model.TCAuthor;
 import info.lofei.app.tuchong.model.TCComment;
