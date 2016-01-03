@@ -1,5 +1,7 @@
 package info.lofei.app.tuchong.model;
 
+import java.io.Serializable;
+
 /**
  * TCCamera.
  *
@@ -7,7 +9,7 @@ package info.lofei.app.tuchong.model;
  * @version 1.0.0
  *          created at: 2015-10-23 16:53
  */
-public class TCCamera {
+public class TCCamera implements Serializable {
 
     private String name;
 

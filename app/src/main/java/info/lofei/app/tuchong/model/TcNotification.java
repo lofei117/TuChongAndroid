@@ -1,9 +1,11 @@
 package info.lofei.app.tuchong.model;
 
+import java.io.Serializable;
+
 /**
  * Created by jerrysher on 11/17/15.
  */
-public class TcNotification {
+public class TCNotification implements Serializable {
     /*
     "unreadComments": [],
   "unreadReposts": [],

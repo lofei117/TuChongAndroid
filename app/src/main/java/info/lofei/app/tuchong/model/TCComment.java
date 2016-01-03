@@ -2,6 +2,7 @@ package info.lofei.app.tuchong.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @version 1.0.0
  *          created at: 2015-07-16 17:57
  */
-public class TCComment {
+public class TCComment implements Serializable {
 
     @SerializedName("note_id")
     private long noteId;

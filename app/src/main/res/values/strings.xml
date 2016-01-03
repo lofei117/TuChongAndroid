@@ -58,5 +58,6 @@
     <string name="enter_home_page">进入主页</string>
     <string name="homepage_follow">关注</string>
     <string name="author_info_follow_count">%d关注者</string>
+    <string name="image_detail">more info</string>
 
 </resources>

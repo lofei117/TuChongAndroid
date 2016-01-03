@@ -2,6 +2,8 @@ package info.lofei.app.tuchong.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * TODO comment here.
  *
@@ -9,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * @version 1.0.0
  *          created at: 2015-10-19 19:17
  */
-public class TCExif {
+public class TCExif implements Serializable {
 
     private TCCamera camera;
 
