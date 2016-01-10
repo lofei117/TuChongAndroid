@@ -14,8 +14,8 @@ android {
         applicationId "info.lofei.app.tuchong"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 2
-        versionName "0.1"
+        versionCode 3
+        versionName "0.2"
     }
     buildTypes {
         release {
@@ -39,8 +39,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
-    compile 'com.android.support:support-annotations:22.2.1'
-    compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'com.umeng.analytics:analytics:latest.integration'

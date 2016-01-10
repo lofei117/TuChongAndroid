@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -120,7 +119,7 @@ public class LoginActivity extends BaseActivity{
                     case LoginResult.CODE_SUCCESS:
                         //保存用户id
                         PreferenceUtil.putString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, response.getId());
-                        AppManager.getInstance().finishAllActivitis();
+                        AppManager.getInstance().finishAllActivities();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         break;
                     case LoginResult.CODE_PWD_OR_NAME_ERROR:

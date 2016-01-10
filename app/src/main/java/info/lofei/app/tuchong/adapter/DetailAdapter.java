@@ -120,8 +120,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     }
 
     private int getImageCount() {
-        int line = mPost.getImage_count() / ITEM_COUNT_IN_ONE_LINE +
-                (mPost.getImage_count() % ITEM_COUNT_IN_ONE_LINE == 0 ? 0 : 1);
+        int line = mPost.getImageCount() / ITEM_COUNT_IN_ONE_LINE +
+                (mPost.getImageCount() % ITEM_COUNT_IN_ONE_LINE == 0 ? 0 : 1);
         return line;
     }
 
@@ -247,7 +247,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 postTags.setMovementMethod(LinkMovementMethod.getInstance());
             }
 
-            postPublishedAt.setText(mPost.getPublished_at());
+            postPublishedAt.setText(mPost.getPublishedTime());
             final TCAuthor author = mPost.getAuthor();
 
             final TCSite site = mPost.getSite();
@@ -341,8 +341,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 comment.setText(spannable);
                 time.setText(tcComment.getCreatedAt());
                 if(tcComment.getImage() != null){
-                    String url = String.format(TuChongApi.PHOTO_URL_MEDIUM, tcComment.getImage().getUser_id(),
-                            tcComment.getImage().getImg_id());
+                    String url = String.format(TuChongApi.PHOTO_URL_MEDIUM, tcComment.getImage().getUserId(),
+                            tcComment.getImage().getImageId());
                     RequestManager.loadImage(url, RequestManager.getImageListener(theCommentimageView, null, null));
                     theCommentimageView.setVisibility(View.VISIBLE);
                 }else{
@@ -394,7 +394,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 return;
             }
 
-            likePostButton.setText(mPost.is_favorite() ? R.string.post_has_liked :  R.string.post_like);
+            likePostButton.setText(mPost.isFavorite() ? R.string.post_has_liked :  R.string.post_like);
 
             doSomeToPostView.setVisibility(View.GONE);
 
@@ -423,7 +423,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             int baseItemIdx = (position - getHeaderCount()) * ITEM_COUNT_IN_ONE_LINE;
 
             for (int i = 0; i < ITEM_COUNT_IN_ONE_LINE; i++) {
-                int itemIdx = baseItemIdx + i;
+                final int itemIdx = baseItemIdx + i;
                 final ImageView image;
                 switch (i) {
                     case 0:
@@ -452,15 +452,16 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
                 final TCImage tcImage = mPost.getImages().get(itemIdx);
 
-                final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthor_id(),
-                        tcImage.getImg_id());
+                final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthorId(),
+                        tcImage.getImageId());
                 RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
 
                 image.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(final View v) {
                         Intent intent = new Intent(mContext, ImageActivity.class);
-                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_URL, url);
+                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_INDEX, itemIdx);
+                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_POST, mPost);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ActivityOptions transitionActivityOptions =
                                     ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
@@ -476,7 +477,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                     image.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-                            return mOnImageLongClickListener.onLongClick(v, tcImage.getImg_id(), mPost.getPost_id());
+                            return mOnImageLongClickListener.onLongClick(v, tcImage.getImageId(), mPost.getPostId());
                         }
                     });
                 }

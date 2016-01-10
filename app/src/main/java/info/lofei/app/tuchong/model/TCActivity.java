@@ -1,5 +1,6 @@
 package info.lofei.app.tuchong.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @version 1.0.0
  *          created at: 2015-06-22 20:07
  */
-public class TCActivity {
+public class TCActivity implements Serializable {
 
     private String type;
 

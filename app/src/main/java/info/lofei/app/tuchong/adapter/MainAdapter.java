@@ -77,7 +77,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         @Bind(R.id.tv_title)
         TextView title;
 
-        @Bind(R.id.tv_like_count)
+        @Bind(R.id.tv_favorite_count)
         TextView like_count;
 
         @Bind(R.id.tv_comment_count)
@@ -98,20 +98,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 List<Long> ids = activity.getSite_id_array();
                 boolean isFavorited = ids != null && ids.contains(NumberUtil.toLong(
                         PreferenceUtil.getString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID,"")));
-                post.setIs_favorite(isFavorited);
+                post.setFavorite(isFavorited);
 
-                TCSite site = SitesMapCache.getSite(post.getAuthor_id());
+                TCSite site = SitesMapCache.getSite(post.getAuthorId());
                 if (site != null) {
                     author_name.setText(site.getName());
                 }
                 image.setImageResource(0);
                 title.setText(post.getTitle());
-                like_count.setText(String.valueOf(post.getFavorites()));
-                comment_count.setText(String.valueOf(post.getComments()));
-                int imgCount = post.getImage_count();
+                like_count.setText(String.valueOf(post.getFavoriteCount()));
+                comment_count.setText(String.valueOf(post.getCommentCount()));
+                int imgCount = post.getImageCount();
                 if (imgCount > 0) {
                     TCImage tcImage = post.getImages().get(0);
-                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthor_id(), tcImage.getImg_id());
+                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthorId(), tcImage.getImageId());
                     RequestManager.loadImage(url, RequestManager.getImageListener(image, null, mFailedDrawable));
                 }
 

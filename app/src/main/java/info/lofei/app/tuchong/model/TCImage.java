@@ -1,5 +1,7 @@
 package info.lofei.app.tuchong.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -11,9 +13,11 @@ import java.io.Serializable;
  */
 public class TCImage implements Serializable {
 
-    private long img_id;
+    @SerializedName("img_id")
+    private long mImageId;
 
-    private long user_id;
+    @SerializedName("user_id")
+    private long mUserId;
 
     private String title;
 
@@ -25,20 +29,26 @@ public class TCImage implements Serializable {
 
     private String description;
 
-    public long getImg_id() {
-        return img_id;
+    @SerializedName("user")
+    private TCAuthor mAuthor;
+
+    @SerializedName("exif")
+    private TCExif mExif;
+
+    public long getImageId() {
+        return mImageId;
     }
 
-    public void setImg_id(final long img_id) {
-        this.img_id = img_id;
+    public void setImageId(final long imageId) {
+        this.mImageId = imageId;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public long getUserId() {
+        return mUserId;
     }
 
-    public void setUser_id(final long user_id) {
-        this.user_id = user_id;
+    public void setUserId(final long userId) {
+        this.mUserId = userId;
     }
 
     public String getTitle() {
@@ -73,11 +83,35 @@ public class TCImage implements Serializable {
         this.height = height;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public TCAuthor getAuthor() {
+        return mAuthor;
+    }
+
+    public void setAuthor(TCAuthor author) {
+        mAuthor = author;
+    }
+
+    public TCExif getExif() {
+        return mExif;
+    }
+
+    public void setExif(TCExif exif) {
+        mExif = exif;
+    }
+
     @Override
     public String toString() {
         return "TCImage{" +
-                "img_id=" + img_id +
-                ", user_id=" + user_id +
+                "img_id=" + mImageId +
+                ", user_id=" + mUserId +
                 ", title='" + title + '\'' +
                 ", excerpt='" + excerpt + '\'' +
                 ", width=" + width +

@@ -67,7 +67,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
                             @Override
                             public void onResponse(LogoutResult response) {
-                                AppManager.getInstance().finishAllActivitis();
+                                AppManager.getInstance().finishAllActivities();
                                 startActivity(new Intent(SettingsActivity.this,
                                         RegLoginActivity.class));
                                 if (response != null && "SUCCESS".equalsIgnoreCase(response.getResult())) {

@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import info.lofei.app.tuchong.data.request.result.LogoutResult;
 
 /**
- * 登录请求.
+ * 登出请求.
  *
  * @author lofei lofei@lofei.info
  * @version 1.0.0

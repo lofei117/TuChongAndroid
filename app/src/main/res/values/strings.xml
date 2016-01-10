@@ -63,5 +63,6 @@
     <string name="sms_captcha_hint_text">你的手机%s会收到一条含有数字验证码的短信</string>
     <string name="register_user_protorl">点击注册代表您已经认真阅读并同意接受 用户协议</string>
     <string name="phone_register_resent_sms_code">重新发送验证码(%dS)</string>
+    <string name="image_detail">more info</string>
 
 </resources>

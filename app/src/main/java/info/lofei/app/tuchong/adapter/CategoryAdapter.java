@@ -14,7 +14,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
-import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.activity.PostDetailActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.model.TCImage;
@@ -74,7 +73,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         @Bind(R.id.tv_image_count)
         TextView imageCount;
 
-        @Bind(R.id.tv_like_count)
+        @Bind(R.id.tv_favorite_count)
         TextView like_count;
 
         @Bind(R.id.tv_comment_count)
@@ -91,18 +90,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public void bindData(final TCPost post) {
             if (post != null) {
-                TCSite site = SitesMapCache.getSite(post.getAuthor_id());
+                TCSite site = SitesMapCache.getSite(post.getAuthorId());
                 if (site != null) {
                     author_name.setText(site.getName());
                 }
                 image.setImageResource(0);
                 title.setText(post.getTitle());
-                like_count.setText(String.valueOf(post.getFavorites()));
-                comment_count.setText(String.valueOf(post.getComments()));
-                int imgCount = post.getImage_count();
+                like_count.setText(String.valueOf(post.getFavoriteCount()));
+                comment_count.setText(String.valueOf(post.getCommentCount()));
+                int imgCount = post.getImageCount();
                 if (imgCount > 0) {
                     TCImage tcImage = post.getImages().get(0);
-                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthor_id(), tcImage.getImg_id());
+                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthorId(), tcImage.getImageId());
                     RequestManager.loadImage(url, RequestManager.getImageListener(image, null, mFailedDrawable));
                 }
                 if(imgCount > 1){

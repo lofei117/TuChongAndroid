@@ -7,12 +7,9 @@ import com.android.volley.VolleyError;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +24,6 @@ import butterknife.ButterKnife;
 import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.LoginActivity;
-import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.adapter.CategoryAdapter;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.data.request.GetCategoryPosts;
@@ -191,7 +187,7 @@ public class CategoryFragment extends BaseFragment {
                     mSwipeRefreshLayout.setRefreshing(false);
                     if (error instanceof AuthFailureError) {
                         RequestManager.cancelAll(this);
-                        AppManager.getInstance().finishAllActivitis();
+                        AppManager.getInstance().finishAllActivities();
                         startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
                 }

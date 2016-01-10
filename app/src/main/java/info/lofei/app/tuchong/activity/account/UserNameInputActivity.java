@@ -325,7 +325,7 @@ public class UserNameInputActivity extends BaseActivity implements View.OnClickL
                     case LoginResult.CODE_SUCCESS:
                         //保存用户id
                         PreferenceUtil.putString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, response.getId());
-                        AppManager.getInstance().finishAllActivitis();
+                        AppManager.getInstance().finishAllActivities();
                         startActivity(new Intent(UserNameInputActivity.this, MainActivity.class));
                         break;
                     case LoginResult.CODE_PWD_OR_NAME_ERROR:

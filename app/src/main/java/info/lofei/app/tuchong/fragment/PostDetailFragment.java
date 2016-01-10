@@ -122,7 +122,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     private void loadPostDetailData() {
         if(mTCPost != null){
             executeRequest(new GetPostDetail(
-                    String.format(TuChongApi.POST_DETAIL_URL, mTCPost.getPost_id()),
+                    String.format(TuChongApi.POST_DETAIL_URL, mTCPost.getPostId()),
                     new Listener<TCPost>() {
 
                         @Override
@@ -131,10 +131,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                                 mTCPost.setAuthor(response.getAuthor());
                                 mTCPost.setTags(response.getTags());
                                 mTCPost.setParsedContent(response.getParsedContent());
-                                mTCPost.setFavorites(response.getFavorites());
+                                mTCPost.setFavoriteCount(response.getFavoriteCount());
+                                mTCPost.setImages(response.getImages());
 
-                                if(!mTCPost.is_favorite() && response.getFavorites() > 0){
-                                    final String url = String.format(TuChongApi.FAVORITE_POST_URL, mTCPost.getPost_id());
+                                if(!mTCPost.isFavorite() && response.getFavoriteCount() > 0){
+                                    final String url = String.format(TuChongApi.FAVORITE_POST_URL, mTCPost.getPostId());
                                     executeRequest(new FavoriteRequest(
                                             (Request.Method.PUT), url,
                                             new Response.Listener<FavoriteResult>() {
@@ -142,11 +143,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                                                 @Override
                                                 public void onResponse(FavoriteResult response) {
                                                     if (response != null) {
-                                                        if(NumberUtil.toInt(response.getFavoriteCount()) != mTCPost.getFavorites()){
+                                                        if(NumberUtil.toInt(response.getFavoriteCount()) != mTCPost.getFavoriteCount()){
                                                             executeRequest(new FavoriteRequest((Request.Method.DELETE), url,null, null));
-                                                            mTCPost.setIs_favorite(false);
+                                                            mTCPost.setFavorite(false);
                                                         }else{
-                                                            mTCPost.setIs_favorite(true);
+                                                            mTCPost.setFavorite(true);
                                                         }
                                                         mAdapter.notifyDataSetChanged();
                                                     }
@@ -232,7 +233,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 @Override
                 public boolean onLikeButtonClick(final View view, boolean isLiked) {
                     //TODO like  喜欢或者取消喜欢post
-                    String url = String.format(TuChongApi.FAVORITE_POST_URL, mTCPost.getPost_id());
+                    String url = String.format(TuChongApi.FAVORITE_POST_URL, mTCPost.getPostId());
                     executeRequest(new FavoriteRequest(
                             (isLiked ? Request.Method.DELETE : Request.Method.PUT), url,
                             new Response.Listener<FavoriteResult>() {
@@ -301,7 +302,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         if(mTCPost == null){
             return;
         }
-        String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPost_id());
+        String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPostId());
         executeRequest(new GetComments(url, new Listener<List<TCComment>>() {
             @Override
             public void onResponse(final List<TCComment> response) {
@@ -328,11 +329,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 String context = etCommentContent.getText().toString();
                 etCommentContent.setText(null);
 
-                String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPost_id());
+                String url = String.format(TuChongApi.COMMENT_URL, mTCPost.getPostId());
                 HashMap<String, String> map = new HashMap<>();
                 map.put("format","json");
                 map.put("content",context);
-                map.put("post_id", "" + mTCPost.getPost_id());
+                map.put("post_id", "" + mTCPost.getPostId());
                 if(replaytoUserId > 0){
                     map.put("replyto[]", "" + replaytoUserId);
                 }
@@ -352,5 +353,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 }));
                 break;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }
