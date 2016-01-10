@@ -423,7 +423,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             int baseItemIdx = (position - getHeaderCount()) * ITEM_COUNT_IN_ONE_LINE;
 
             for (int i = 0; i < ITEM_COUNT_IN_ONE_LINE; i++) {
-                int itemIdx = baseItemIdx + i;
+                final int itemIdx = baseItemIdx + i;
                 final ImageView image;
                 switch (i) {
                     case 0:
@@ -460,7 +460,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                     @Override
                     public void onClick(final View v) {
                         Intent intent = new Intent(mContext, ImageActivity.class);
-                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE, tcImage);
+                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_INDEX, itemIdx);
                         intent.putExtra(ImageActivity.BUNDLE_EXTRA_POST, mPost);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ActivityOptions transitionActivityOptions =

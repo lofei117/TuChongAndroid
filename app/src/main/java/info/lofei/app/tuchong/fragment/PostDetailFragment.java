@@ -354,4 +354,10 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 break;
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }
