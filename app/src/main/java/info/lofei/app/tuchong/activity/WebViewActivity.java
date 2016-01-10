@@ -11,10 +11,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import butterknife.Bind;
@@ -33,7 +35,6 @@ public class WebViewActivity extends BaseActivity {
 
     private static final String DEFAULT_WEBSITE = "http://www.tuchong.com";
 
-    @Bind(R.id.the_web_view)
     WebView mWebView;
 
     @Bind(R.id.progressBar)
@@ -42,6 +43,9 @@ public class WebViewActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
+    @Bind(R.id.webview_content)
+    FrameLayout frameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +53,20 @@ public class WebViewActivity extends BaseActivity {
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
 
+        mWebView = new WebView(this);
+        frameLayout.addView(mWebView);
+
         if (getIntent() == null) {
             return;
         }
+
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
 

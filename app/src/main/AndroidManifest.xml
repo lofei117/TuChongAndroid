@@ -58,6 +58,21 @@
         <activity android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.account.PhoneNoInputActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.account.InputSmsCaptchaActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.account.EmailInputActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.account.RegPasswordInputActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.account.UserNameInputActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activity.RegLoginActivity"
             android:screenOrientation="portrait"/>
 

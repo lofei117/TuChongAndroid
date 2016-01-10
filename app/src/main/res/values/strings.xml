@@ -58,5 +58,10 @@
     <string name="enter_home_page">进入主页</string>
     <string name="homepage_follow">关注</string>
     <string name="author_info_follow_count">%d关注者</string>
+    <string name="register_mode_phone">用手机注册</string>
+    <string name="register_mode_email">用邮箱注册</string>
+    <string name="sms_captcha_hint_text">你的手机%s会收到一条含有数字验证码的短信</string>
+    <string name="register_user_protorl">点击注册代表您已经认真阅读并同意接受 用户协议</string>
+    <string name="phone_register_resent_sms_code">重新发送验证码(%dS)</string>
 
 </resources>

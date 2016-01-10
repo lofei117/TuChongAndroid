@@ -20,15 +20,25 @@ public class TuChongApi {
 
     public static final String RESET_PWD = BASE_URL + "password";
 
+    public static final String REGIESTER_USER = BASE_URL + "accounts/register";
+
     public static final String ACTIVITY_LIST_URL = BASE_URL + "users/self/activities?count=%1$d&offset=%2$d";
 
     public static final String SITE_URL = V1_BASE_URL + "site/get/?site_id=%1$s";
 
     public static final String CAPTCHA_URL = BASE_URL +  "captcha/image";
 
+    public static final String SMS_CAPTCHA = BASE_URL + "captcha/sms";
+
     public static final String LOGIN_URL = BASE_URL + "accounts/login";
 
     public static final String LOGOUT_URL = V1_BASE_URL + "account/logout";
+
+    public static final String ACCOUNTS_CHECK_EMAIL = BASE_URL + "accounts/check-email/";
+
+    public static final String ACCOUNTS_CHECK_PHONE_NO = BASE_URL + "accounts/check-mobile/0086/";
+
+    public static final String ACCOUNTS_CHECK_UNAME = BASE_URL + "accounts/check-name/";
 
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
 

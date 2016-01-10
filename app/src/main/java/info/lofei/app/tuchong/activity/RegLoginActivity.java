@@ -11,6 +11,7 @@ import com.umeng.onlineconfig.OnlineConfigAgent;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.activity.account.PhoneNoInputActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 
 /**
@@ -54,9 +55,7 @@ public class RegLoginActivity extends BaseActivity implements View.OnClickListen
                 break;
 
             case R.id.register:
-                WebViewActivity.WebLaunchConfig config = new WebViewActivity.WebLaunchConfig("http://tuchong.com/signup/", "用户注册");
-                config.setNetTitleEnable(true);
-                WebViewActivity.launch(this, config);
+                PhoneNoInputActivity.launch(this);
                 break;
         }
     }

@@ -27,12 +27,12 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
-        alphaAnimation = new AlphaAnimation(1.0f, 0.3f);
+        alphaAnimation = new AlphaAnimation(1.0f, 1.0f);
         alphaAnimation.setDuration(3000);
         alphaAnimation.setAnimationListener(this);
-        alphaAnimation.startNow();
-
         rootView.setAnimation(alphaAnimation);
+
+        alphaAnimation.startNow();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        finish();
+
         //判断是否存在user id。
         if(TextUtils.isEmpty(PreferenceUtil.getString(
                 LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID, ""))){
@@ -52,7 +52,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
-
+        finish();
     }
 
     @Override
