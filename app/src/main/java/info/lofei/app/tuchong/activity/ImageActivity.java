@@ -150,9 +150,13 @@ public class ImageActivity extends BaseActivity {
         TCExif tcExif = tcImage == null ? null : tcImage.getExif();
         if (tcExif != null) {
             StringBuilder sb = new StringBuilder();
-            sb.append(tcExif.getCamera().getName()).append("\n");
+            if(tcExif.getCamera() != null){
+                sb.append(tcExif.getCamera().getName()).append("\n");
+            }
             sb.append(tcExif.getExposure()).append("\n");
-            sb.append(tcExif.getLens().getName()).append("\n");
+            if(tcExif.getLens() != null){
+                sb.append(tcExif.getLens().getName()).append("\n");
+            }
             sb.append(tcExif.getTakenTime()).append("\n");
             Toast.makeText(ImageActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
         }
