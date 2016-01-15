@@ -1,10 +1,13 @@
 package info.lofei.app.tuchong.activity;
 
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.SurfaceView;
 
 import com.android.volley.Request;
+import com.umeng.analytics.MobclickAgent;
 
 import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.data.RequestManager;
@@ -22,6 +25,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getInstance().add(this);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

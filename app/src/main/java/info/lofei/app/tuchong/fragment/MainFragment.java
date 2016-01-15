@@ -43,12 +43,11 @@ public class MainFragment extends BaseFragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.fab)
-    FloatingActionButton mFloatingActionButton;
-
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     //#endregion
+
+    private boolean isLoadFinished;
 
     private MainActivity mMainActivity;
 
@@ -61,16 +60,18 @@ public class MainFragment extends BaseFragment {
         return mainFragment;
     }
 
+    private View view;
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
+        if(view == null){
+            view = inflater.inflate(R.layout.fragment_main, container, false);
+            ButterKnife.bind(this, view);
 
-        setupFloatActionButton();
-        setupRecyclerView();
-        setupSwipeRefreshLayout();
+            setupRecyclerView();
+            setupSwipeRefreshLayout();
 
-        setupData();
+            setupData();
+        }
 
         return view;
     }
@@ -94,14 +95,16 @@ public class MainFragment extends BaseFragment {
             mAdapter = new MainAdapter(mMainActivity);
         }
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void setupFloatActionButton() {
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if(linearLayoutManager.getItemCount() - linearLayoutManager.findLastCompletelyVisibleItemPosition() < Constant.PAGE_COUNT / 2
+                        && !isLoadFinished){
+                    loadData(false);
+                }
+
             }
         });
     }
@@ -138,7 +141,9 @@ public class MainFragment extends BaseFragment {
                     mTCActivitiesList.addAll(response);
                     mAdapter.notifyDataSetChanged();
                     mSwipeRefreshLayout.setRefreshing(false);
-
+                }
+                if(response == null && response.isEmpty()){
+                    isLoadFinished = true;
                 }
             }
         }, new Response.ErrorListener() {

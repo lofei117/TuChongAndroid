@@ -2,12 +2,14 @@ package info.lofei.app.tuchong.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.umeng.fb.FeedbackAgent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,14 +33,29 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.setting_item_clean_cache)
     View mCleanCache;
 
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
 
+        setSupportActionBar(mToolbar);
+
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mLogoutBtn.setOnClickListener(this);
         mCleanCache.setOnClickListener(this);
+        findViewById(R.id.setting_item_feedback).setOnClickListener(this);
     }
 
     @Override
@@ -50,14 +67,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
                             @Override
                             public void onResponse(LogoutResult response) {
-                                AppManager.getInstance().finishAllActivitis();
+                                AppManager.getInstance().finishAllActivities();
                                 startActivity(new Intent(SettingsActivity.this,
-                                        LoginActivity.class));
+                                        RegLoginActivity.class));
                                 if (response != null && "SUCCESS".equalsIgnoreCase(response.getResult())) {
                                     //// leave blank
 
                                 } else {
-                                    Toast.makeText(SettingsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, R.string.logout_failed, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }, null));
@@ -65,6 +82,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
             case R.id.setting_item_clean_cache:
                 //todo clean cache.
+                break;
+            case R.id.setting_item_feedback:
+                //USER FEEDBACK
+                FeedbackAgent agent = new FeedbackAgent(this);
+                agent.startFeedbackActivity();
                 break;
         }
     }

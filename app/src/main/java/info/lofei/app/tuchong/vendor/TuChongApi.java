@@ -16,15 +16,29 @@ public class TuChongApi {
     //region apis
     private static final String BASE_URL = "http://tuchong.com/rest/";
 
-    private static final String BASE_URL_OLD = "http://tuchong.com/api/";
+    private static final String V1_BASE_URL = "http://tuchong.com/api/";
+
+    public static final String RESET_PWD = BASE_URL + "password";
+
+    public static final String REGIESTER_USER = BASE_URL + "accounts/register";
 
     public static final String ACTIVITY_LIST_URL = BASE_URL + "users/self/activities?count=%1$d&offset=%2$d";
 
-    public static final String SITE_URL = BASE_URL + "site/get/?site_id=%1$d";
+    public static final String SITE_URL = V1_BASE_URL + "site/get/?site_id=%1$s";
 
     public static final String CAPTCHA_URL = BASE_URL +  "captcha/image";
 
+    public static final String SMS_CAPTCHA = BASE_URL + "captcha/sms";
+
     public static final String LOGIN_URL = BASE_URL + "accounts/login";
+
+    public static final String LOGOUT_URL = V1_BASE_URL + "account/logout";
+
+    public static final String ACCOUNTS_CHECK_EMAIL = BASE_URL + "accounts/check-email/";
+
+    public static final String ACCOUNTS_CHECK_PHONE_NO = BASE_URL + "accounts/check-mobile/0086/";
+
+    public static final String ACCOUNTS_CHECK_UNAME = BASE_URL + "accounts/check-name/";
 
     public static final String NOTIFICATION_URL = BASE_URL + "users/%1$d/notifications";
 
@@ -36,7 +50,9 @@ public class TuChongApi {
 
     public static final String EXIF_DETAIL_URL = BASE_URL + "images/%1$d/exif";  // image id
 
-    public static final String EXIF_URL = BASE_URL_OLD + "post/get-post/?img_id=%1$d&post_id=%2$d";
+    public static final String EXIF_URL = V1_BASE_URL + "post/get-post/?img_id=%1$d&post_id=%2$d";
+
+    public static final String FAVORITE_POST_URL =  BASE_URL + "users/self/favorites/%1$d";
     //endregion
 
     //region photo url

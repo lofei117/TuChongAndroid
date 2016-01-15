@@ -1,22 +1,21 @@
 package info.lofei.app.tuchong.data.request;
 
+import com.google.gson.Gson;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Map;
 
-import info.lofei.app.tuchong.data.request.result.LoginResult;
 import info.lofei.app.tuchong.data.request.result.LogoutResult;
 
 /**
- * 登录请求.
+ * 登出请求.
  *
  * @author lofei lofei@lofei.info
  * @version 1.0.0

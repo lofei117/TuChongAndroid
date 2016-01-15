@@ -16,10 +16,13 @@ import butterknife.Bind;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.RequestManager;
+import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.model.TCActivity;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
+import info.lofei.app.tuchong.utils.NumberUtil;
+import info.lofei.app.tuchong.utils.PreferenceUtil;
 import info.lofei.app.tuchong.utils.SitesMapCache;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -68,10 +71,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         @Bind(R.id.iv_photo)
         ImageView image;
 
+        @Bind(R.id.tv_image_count)
+        TextView imageCount;
+
         @Bind(R.id.tv_title)
         TextView title;
 
-        @Bind(R.id.tv_like_count)
+        @Bind(R.id.tv_favorite_count)
         TextView like_count;
 
         @Bind(R.id.tv_comment_count)
@@ -89,17 +95,31 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         public void bindData(final TCActivity activity) {
             if (activity != null) {
                 final TCPost post = activity.getPost();
-                TCSite site = SitesMapCache.getSite(post.getAuthor_id());
+                List<Long> ids = activity.getSite_id_array();
+                boolean isFavorited = ids != null && ids.contains(NumberUtil.toLong(
+                        PreferenceUtil.getString(LoginRequest.DATA_SAVE_TUCHONG_CURRENT_USER_ID,"")));
+                post.setFavorite(isFavorited);
+
+                TCSite site = SitesMapCache.getSite(post.getAuthorId());
                 if (site != null) {
                     author_name.setText(site.getName());
                 }
+                image.setImageResource(0);
                 title.setText(post.getTitle());
-                like_count.setText(String.valueOf(post.getFavorites()));
-                comment_count.setText(String.valueOf(post.getComments()));
-                if (post.getImage_count() > 0) {
+                like_count.setText(String.valueOf(post.getFavoriteCount()));
+                comment_count.setText(String.valueOf(post.getCommentCount()));
+                int imgCount = post.getImageCount();
+                if (imgCount > 0) {
                     TCImage tcImage = post.getImages().get(0);
-                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthor_id(), tcImage.getImg_id());
+                    String url = String.format(TuChongApi.PHOTO_URL_LARGE, post.getAuthorId(), tcImage.getImageId());
                     RequestManager.loadImage(url, RequestManager.getImageListener(image, null, mFailedDrawable));
+                }
+
+                if(imgCount > 1){
+                    imageCount.setText(mContext.getString(R.string.item_image_count, imgCount));
+                    imageCount.setVisibility(View.VISIBLE);
+                }else{
+                    imageCount.setVisibility(View.GONE);
                 }
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

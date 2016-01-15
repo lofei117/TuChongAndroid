@@ -2,6 +2,7 @@ package info.lofei.app.tuchong.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @version 1.0.0
  *          created at: 2015-07-16 17:57
  */
-public class TCComment {
+public class TCComment implements Serializable {
 
     @SerializedName("note_id")
     private long noteId;
@@ -42,6 +43,8 @@ public class TCComment {
 
     @SerializedName("reply_to")
     private List<TCAuthor> replyTo;
+
+    private TCImage image;
 
     private TCAuthor author;
 
@@ -147,6 +150,14 @@ public class TCComment {
 
     public void setAuthor(final TCAuthor author) {
         this.author = author;
+    }
+
+    public TCImage getImage() {
+        return image;
+    }
+
+    public void setImage(TCImage image) {
+        this.image = image;
     }
 
     @Override

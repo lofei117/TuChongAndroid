@@ -1,10 +1,8 @@
 package info.lofei.app.tuchong.model;
 
-import android.support.annotation.StringDef;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -16,45 +14,71 @@ import java.util.List;
  */
 public class TCPost implements Serializable {
 
-//    @Retention(RetentionPolicy.SOURCE)
-//    @StringDef({TEXT, MULTI_PHOTO})
-//    public @interface Type{}
-
     public static final String TEXT = "text";
+
     public static final String MULTI_PHOTO = "multi-photo";
 
-    private long post_id;
+    @SerializedName("post_id")
+    private long mPostId;
 
     private String type;
 
     private String url;
 
-    private long site_id;
+    @SerializedName("site_id")
+    private long mSiteId;
 
-    private long author_id;
+    @SerializedName("author_id")
+    private long mAuthorId;
 
-    private String published_at;
+    @SerializedName("published_at")
+    private String mPublishedTime;
 
     private String excerpt;
 
-    private int favorites;
+    @SerializedName("favorites")
+    private int mFavoriteCount;
 
-    private int comments;
+    @SerializedName("comments")
+    private int mCommentCount;
 
     private String title;
 
-    private int image_count;
+    @SerializedName("image_count")
+    private int mImageCount;
+
+    private List<String> tags;
+
+    private TCSite site;
+
+    private TCAuthor author;
+
+    private String parsedContent;
+
+    private int views;
+
+    private List<String> flags;
+
+    /*
+    "privileges": {
+        "edit": false,
+                "delete": false,
+                "admin": false,
+                "update": false
+    },
+     */
+
+    @SerializedName("is_favorite")
+    private boolean mIsFavorite;
 
     private List<TCImage> images;
 
-    private boolean is_favorite;
-
-    public long getPost_id() {
-        return post_id;
+    public long getPostId() {
+        return mPostId;
     }
 
-    public void setPost_id(final long post_id) {
-        this.post_id = post_id;
+    public void setPostId(final long postId) {
+        this.mPostId = postId;
     }
 
     public String getType() {
@@ -73,28 +97,28 @@ public class TCPost implements Serializable {
         this.url = url;
     }
 
-    public long getSite_id() {
-        return site_id;
+    public long getSiteId() {
+        return mSiteId;
     }
 
-    public void setSite_id(final long site_id) {
-        this.site_id = site_id;
+    public void setSiteId(final long siteId) {
+        this.mSiteId = siteId;
     }
 
-    public long getAuthor_id() {
-        return author_id;
+    public long getAuthorId() {
+        return mAuthorId;
     }
 
-    public void setAuthor_id(final long author_id) {
-        this.author_id = author_id;
+    public void setAuthorId(final long authorId) {
+        this.mAuthorId = authorId;
     }
 
-    public String getPublished_at() {
-        return published_at;
+    public String getPublishedTime() {
+        return mPublishedTime;
     }
 
-    public void setPublished_at(final String published_at) {
-        this.published_at = published_at;
+    public void setPublishedTime(final String publishedTime) {
+        this.mPublishedTime = publishedTime;
     }
 
     public String getExcerpt() {
@@ -105,20 +129,20 @@ public class TCPost implements Serializable {
         this.excerpt = excerpt;
     }
 
-    public int getFavorites() {
-        return favorites;
+    public int getFavoriteCount() {
+        return mFavoriteCount;
     }
 
-    public void setFavorites(final int favorites) {
-        this.favorites = favorites;
+    public void setFavoriteCount(final int favoriteCount) {
+        this.mFavoriteCount = favoriteCount;
     }
 
-    public int getComments() {
-        return comments;
+    public int getCommentCount() {
+        return mCommentCount;
     }
 
-    public void setComments(final int comments) {
-        this.comments = comments;
+    public void setCommentCount(final int commentCount) {
+        this.mCommentCount = commentCount;
     }
 
     public String getTitle() {
@@ -129,12 +153,12 @@ public class TCPost implements Serializable {
         this.title = title;
     }
 
-    public int getImage_count() {
-        return image_count;
+    public int getImageCount() {
+        return mImageCount;
     }
 
-    public void setImage_count(final int image_count) {
-        this.image_count = image_count;
+    public void setImageCount(final int imageCount) {
+        this.mImageCount = imageCount;
     }
 
     public List<TCImage> getImages() {
@@ -145,30 +169,59 @@ public class TCPost implements Serializable {
         this.images = images;
     }
 
-    public boolean is_favorite() {
-        return is_favorite;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setIs_favorite(final boolean is_favorite) {
-        this.is_favorite = is_favorite;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public boolean isFavorite() {
+        return mIsFavorite;
+    }
+
+    public void setFavorite(final boolean isFavorite) {
+        this.mIsFavorite = isFavorite;
+    }
+
+    public TCAuthor getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(TCAuthor author) {
+        this.author = author;
+    }
+
+    public TCSite getSite() {
+        return site;
+    }
+
+    public void setSite(TCSite site) {
+        this.site = site;
+    }
+
+    public String getParsedContent() {
+        return parsedContent;
+    }
+
+    public void setParsedContent(String parsedContent) {
+        this.parsedContent = parsedContent;
     }
 
     @Override
     public String toString() {
         return "TCPost{" +
-                "post_id=" + post_id +
-                ", type='" + type + '\'' +
-                ", url='" + url + '\'' +
-                ", site_id=" + site_id +
-                ", author_id=" + author_id +
-                ", published_at='" + published_at + '\'' +
+                "mPostId=" + mPostId +
+                ", mSiteId=" + mSiteId +
+                ", mAuthorId=" + mAuthorId +
+                ", mPublishedTime='" + mPublishedTime + '\'' +
                 ", excerpt='" + excerpt + '\'' +
-                ", favorites=" + favorites +
-                ", comments=" + comments +
+                ", favorites=" + mFavoriteCount +
                 ", title='" + title + '\'' +
-                ", image_count=" + image_count +
-                ", images=" + images +
-                ", is_favorite=" + is_favorite +
+                ", mImageCount=" + mImageCount +
+                ", author=" + author +
+                ", is_favorite=" + mIsFavorite +
                 '}';
     }
 }

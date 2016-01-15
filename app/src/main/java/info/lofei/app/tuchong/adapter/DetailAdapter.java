@@ -4,11 +4,23 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,23 +30,25 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.activity.AuthorShowActivity;
+import info.lofei.app.tuchong.activity.CategoryActivity;
 import info.lofei.app.tuchong.activity.ImageActivity;
 import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.model.TCAuthor;
 import info.lofei.app.tuchong.model.TCComment;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
+import info.lofei.app.tuchong.model.TCSite;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
- * TODO comment here.
- *
  * @author lofei lofei@lofei.info
  * @version 1.0.0
  *          created at: 2015-07-08 13:38
  */
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHolder> {
 
+    public static final int ITEM_COUNT_IN_ONE_LINE = 3;
     private Context mContext;
 
     private TCPost mPost;
@@ -43,12 +57,18 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
     private OnImageLongClickListener mOnImageLongClickListener;
 
+    private OnCommentButtonClickListener mOnCommentButtonClickListener;
+
+    private OnLikeButtonClickListener mOnLikeButtonClickListener;
+
+    private OnCommentItemClickListener mOnCommentItemClickListener;
+
     public DetailAdapter(final Context context, final TCPost post) {
         mPost = post;
         mContext = context;
     }
 
-    public void fillData(List<TCComment> commentList) {
+    public void fillCommentsData(List<TCComment> commentList) {
         mCommentList = commentList;
         notifyDataSetChanged();
     }
@@ -74,8 +94,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
             case R.layout.item_comment_detail:
                 viewHolder = new CommentViewHolder(view);
                 break;
+            case R.layout.item_image_detail:
+                viewHolder = new PhotoImagesHolder(view);
+                break;
             default:
-                viewHolder = new ImageViewHolder(view);
+                viewHolder = new PhotoImagesHolder(view);
                 break;
         }
         return viewHolder;
@@ -88,7 +111,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
     @Override
     public int getItemCount() {
-        return mPost == null ? 0 : (getImageCount() + getHeaderCount() + getCommentCount());
+        return mPost == null ? 0 :
+                (getImageCount() + getHeaderCount() + getCommentCount());
     }
 
     private int getHeaderCount() {
@@ -96,7 +120,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     }
 
     private int getImageCount() {
-        return mPost.getImage_count();
+        int line = mPost.getImageCount() / ITEM_COUNT_IN_ONE_LINE +
+                (mPost.getImageCount() % ITEM_COUNT_IN_ONE_LINE == 0 ? 0 : 1);
+        return line;
     }
 
     private int getCommentCount() {
@@ -105,6 +131,18 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
     public void setOnImageLongClickListener(OnImageLongClickListener onImageLongClickListener) {
         mOnImageLongClickListener = onImageLongClickListener;
+    }
+
+    public void setOnCommentItemClick(OnCommentItemClickListener  onCommentItemClickListener){
+        mOnCommentItemClickListener = onCommentItemClickListener;
+    }
+
+    public void setOnCommentButtonClickListener(OnCommentButtonClickListener onCommentClickListener){
+        mOnCommentButtonClickListener = onCommentClickListener;
+    }
+
+    public void setmOnLikeButtonClickListener(OnLikeButtonClickListener onLikeClickListener){
+        mOnLikeButtonClickListener = onLikeClickListener;
     }
 
     abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -120,24 +158,132 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
     class HeaderViewHolder extends BaseViewHolder {
 
         @Bind(R.id.tv_title)
-        TextView title;
+        TextView postTitle;
 
         @Bind(R.id.tv_excerpt)
-        TextView excerpt;
+        TextView postExcerpt;
+
+        @Bind(R.id.post_tags)
+        TextView postTags;
+
+        @Bind(R.id.iv_avatar)
+        ImageView postAuthorAvatar;
+
+        @Bind(R.id.tv_post_author_name)
+        TextView postAuthorName;
+
+        @Bind(R.id.tv_post_published_at)
+        TextView postPublishedAt;
 
         public HeaderViewHolder(final View itemView) {
             super(itemView);
         }
 
+        private void setText(TextView textView, String str){
+            if(TextUtils.isEmpty(str)){
+                textView.setVisibility(View.GONE);
+                return;
+            }
+            Spanned spannable;
+            try{
+                spannable = Html.fromHtml(str);
+            }catch (Exception e){
+                //
+                spannable = new SpannedString(str);
+            }
+
+            textView.setText(spannable);
+            textView.setVisibility(TextUtils.isEmpty(str) ? View.GONE : View.VISIBLE);
+        }
+
         @Override
         void bindData(final int position) {
-            if (mPost.getTitle().isEmpty()) {
-                title.setVisibility(View.GONE);
-            } else if (mPost.getExcerpt().isEmpty()) {
-                excerpt.setVisibility(View.GONE);
-                title.setText(mPost.getTitle());
+
+            postAuthorName.setVisibility(View.VISIBLE);
+            postAuthorAvatar.setVisibility(View.VISIBLE);
+            postTitle.setVisibility(View.VISIBLE);
+            postTitle.setVisibility(View.VISIBLE);
+            postExcerpt.setVisibility(View.VISIBLE);
+            postPublishedAt.setVisibility(View.VISIBLE);
+
+            setText(postTitle, mPost.getTitle());
+            setText(postExcerpt, mPost.getParsedContent());
+            if(mPost.getParsedContent() == null){
+                setText(postExcerpt, mPost.getExcerpt());
             }
-            excerpt.setText(mPost.getExcerpt());
+
+            if(mPost.getTags() != null && !mPost.getTags().isEmpty()){
+
+                String tagsString = mPost.getTags().toString();
+                setText(postTags, tagsString);
+                SpannableStringBuilder style = new SpannableStringBuilder(tagsString);
+
+                for(final String tag: mPost.getTags()){
+                    if(TextUtils.isEmpty(tag)){
+                        continue;
+                    }
+
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                        }
+
+                        @Override
+                        public void onClick(View widget) {
+                            Toast.makeText(widget.getContext(), tag, Toast.LENGTH_SHORT).show();
+                            CategoryActivity.launch(widget.getContext(), tag);
+                        }
+                    };
+                    int idx = tagsString.indexOf(tag);
+
+                    style.setSpan(clickableSpan, idx, idx + tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                }
+
+                postTags.setText(style);
+                postTags.setHighlightColor(Color.TRANSPARENT);
+                postTags.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+
+            postPublishedAt.setText(mPost.getPublishedTime());
+            final TCAuthor author = mPost.getAuthor();
+
+            final TCSite site = mPost.getSite();
+
+            if (author != null) {
+                postAuthorAvatar.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v) {
+                        AuthorShowActivity.laucher(v.getContext(), author);
+                    }
+                });
+                postAuthorName.setText(author.getName());
+                RequestManager.loadImage(author.getIconUrl(),
+                        RequestManager.getImageListener(postAuthorAvatar, null, null));
+                //postAuthorAvatar.setOnClickListener(this);
+            }
+
+            if (site != null) {
+                postAuthorName.setText(site.getName());
+                RequestManager.loadImage(site.getIcon(),
+                        RequestManager.getImageListener(postAuthorAvatar, null, null));
+                postAuthorAvatar.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        AuthorShowActivity.laucher(v.getContext(), site);
+                    }
+                });
+            }
+
+            if (author == null && site == null) {
+                postAuthorName.setVisibility(View.GONE);
+                postAuthorAvatar.setVisibility(View.GONE);
+            }
+
         }
     }
 
@@ -155,6 +301,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Bind(R.id.tv_comment_time)
         TextView time;
 
+        @Bind(R.id.the_comment_image)
+        ImageView theCommentimageView;
+
         public CommentViewHolder(final View itemView) {
             super(itemView);
         }
@@ -162,8 +311,20 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
         @Override
         void bindData(int position) {
             position -= (getHeaderCount() + getImageCount());
-            TCComment tcComment = mCommentList.get(position);
+            final TCComment tcComment = mCommentList.get(position);
             if (tcComment != null) {
+                if(itemView != null){
+                    itemView.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(mOnCommentItemClickListener != null){
+                                TCAuthor tcAuthor = tcComment.getAuthor();
+                                mOnCommentItemClickListener.onItemClick(tcComment.getAuthorId(),
+                                        tcAuthor == null ? "" : tcAuthor.getName());
+                            }
+                        }
+                    });
+                }
                 TCAuthor tcAuthor = tcComment.getAuthor();
                 RequestManager.loadImage(tcAuthor.getIconUrl(), RequestManager.getImageListener(avatar, null, null));
                 if (tcComment.getReplyTo() == null || tcComment.getReplyTo().isEmpty()) {
@@ -171,24 +332,51 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
                 } else {
                     author.setText(mContext.getString(R.string.reply_to, tcAuthor.getName(), tcComment.getReplyTo().get(0).getName()));
                 }
-                comment.setText(tcComment.getContent());
+                Spanned spannable;
+                try{
+                    spannable = Html.fromHtml(tcComment.getContent());
+                }catch (Exception e){
+                    spannable = new SpannedString(tcComment.getContent());
+                }
+                comment.setText(spannable);
                 time.setText(tcComment.getCreatedAt());
+                if(tcComment.getImage() != null){
+                    String url = String.format(TuChongApi.PHOTO_URL_MEDIUM, tcComment.getImage().getUserId(),
+                            tcComment.getImage().getImageId());
+                    RequestManager.loadImage(url, RequestManager.getImageListener(theCommentimageView, null, null));
+                    theCommentimageView.setVisibility(View.VISIBLE);
+                }else{
+                    theCommentimageView.setVisibility(View.GONE);
+                }
             }
         }
     }
 
-    class ImageViewHolder extends BaseViewHolder {
+    class PhotoImagesHolder extends BaseViewHolder {
 
-        @Bind(R.id.tv_title)
-        TextView title;
+        @Bind(R.id.iv_photo_layout)
+        ViewGroup imageLayout;
 
-        @Bind(R.id.tv_excerpt)
-        TextView excerpt;
+        @Bind(R.id.do_some_to_post)
+        View doSomeToPostView;
 
-        @Bind(R.id.iv_photo)
-        ImageView image;
+        @Bind(R.id.like_post_button)
+        Button likePostButton;
 
-        public ImageViewHolder(final View itemView) {
+        @Bind(R.id.comment_post_button)
+        Button commentPostButton;
+
+        @Bind(R.id.left_photo_view)
+        ImageView leftPhotoView;
+
+        @Bind(R.id.middle_photo_view)
+        ImageView middlePhotoView;
+
+        @Bind(R.id.right_photo_view)
+        ImageView rightPhotoView;
+
+
+        public PhotoImagesHolder(final View itemView) {
             super(itemView);
         }
 
@@ -200,48 +388,120 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 //            } else {
 //                ViewCompat.setTransitionName(image, null);
 //            }
-            if (mPost.getType().equalsIgnoreCase(TCPost.TEXT)) {
-                title.setText(mPost.getTitle());
-                excerpt.setText(mPost.getExcerpt());
-                title.setVisibility(View.VISIBLE);
-                excerpt.setVisibility(View.VISIBLE);
-            } else {
-                title.setVisibility(View.GONE);
-                excerpt.setVisibility(View.GONE);
+            //todo  the TCPost.TEXT type post need to handle.
+
+            if (mPost.getImages() == null || mPost.getImages().isEmpty()) {
+                return;
             }
-            final TCImage tcImage = mPost.getImages().get(position - getHeaderCount());
-            final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthor_id(), tcImage.getImg_id());
-            RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
 
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    Intent intent = new Intent(mContext, ImageActivity.class);
-                    intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_URL, url);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
-                                mContext.getString(R.string.transition_image));
-                        mContext.startActivity(intent, transitionActivityOptions.toBundle());
-                    } else {
-                        mContext.startActivity(intent);
-                    }
-                }
-            });
+            likePostButton.setText(mPost.isFavorite() ? R.string.post_has_liked :  R.string.post_like);
 
-            if (mOnImageLongClickListener != null) {
-                image.setOnLongClickListener(new View.OnLongClickListener() {
+            doSomeToPostView.setVisibility(View.GONE);
+
+            if(position > getImageCount() - 1){
+                doSomeToPostView.setVisibility(View.VISIBLE);
+                likePostButton.setOnClickListener(new OnClickListener() {
+
                     @Override
-                    public boolean onLongClick(View v) {
-                        return mOnImageLongClickListener.onLongClick(v,  tcImage.getImg_id(), mPost.getPost_id());
+                    public void onClick(View v) {
+                        if (mOnLikeButtonClickListener != null) {
+                            boolean isLiked = !mContext.getResources().getString(R.string.post_like).equalsIgnoreCase(likePostButton.getText().toString());
+                            mOnLikeButtonClickListener.onLikeButtonClick(likePostButton,isLiked);
+                        }
+                    }
+                });
+                commentPostButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mOnCommentButtonClickListener != null){
+                            mOnCommentButtonClickListener.onCommentButtonClick();
+                        }
                     }
                 });
             }
+
+            int baseItemIdx = (position - getHeaderCount()) * ITEM_COUNT_IN_ONE_LINE;
+
+            for (int i = 0; i < ITEM_COUNT_IN_ONE_LINE; i++) {
+                final int itemIdx = baseItemIdx + i;
+                final ImageView image;
+                switch (i) {
+                    case 0:
+                        image = leftPhotoView;
+                        break;
+                    case 1:
+                        image = middlePhotoView;
+                        break;
+                    case 2:
+                        image = rightPhotoView;
+                        break;
+                    default:
+                        image = leftPhotoView;
+                        break;
+
+                }
+
+                image.setImageBitmap(null);
+
+                if (itemIdx >= mPost.getImages().size() || itemIdx < 0) {
+                    image.setVisibility(baseItemIdx == 0 ? View.GONE : View.INVISIBLE);
+                    continue;
+                }
+
+                image.setVisibility(View.VISIBLE);
+
+                final TCImage tcImage = mPost.getImages().get(itemIdx);
+
+                final String url = String.format(TuChongApi.PHOTO_URL_LARGE, mPost.getAuthorId(),
+                        tcImage.getImageId());
+                RequestManager.loadImage(url, RequestManager.getImageListener(image, null, null));
+
+                image.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        Intent intent = new Intent(mContext, ImageActivity.class);
+                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_IMAGE_INDEX, itemIdx);
+                        intent.putExtra(ImageActivity.BUNDLE_EXTRA_POST, mPost);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ActivityOptions transitionActivityOptions =
+                                    ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, image,
+                                            mContext.getString(R.string.transition_image));
+                            mContext.startActivity(intent, transitionActivityOptions.toBundle());
+                        } else {
+                            mContext.startActivity(intent);
+                        }
+                    }
+                });
+
+                if (mOnImageLongClickListener != null) {
+                    image.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return mOnImageLongClickListener.onLongClick(v, tcImage.getImageId(), mPost.getPostId());
+                        }
+                    });
+                }
+            }
         }
+
     }
 
     public interface OnImageLongClickListener {
 
         boolean onLongClick(View view, long imageId, long postId);
     }
+
+    public interface  OnCommentItemClickListener{
+        boolean onItemClick(long authorUserId, String authorUserName);
+    }
+
+    public interface OnCommentButtonClickListener{
+        boolean onCommentButtonClick();
+    }
+
+    public interface OnLikeButtonClickListener{
+        boolean onLikeButtonClick(View view,boolean isLiked);
+    }
+
 
 }

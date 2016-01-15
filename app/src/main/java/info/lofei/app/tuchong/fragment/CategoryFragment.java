@@ -5,9 +5,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,14 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import info.lofei.app.tuchong.AppManager;
 import info.lofei.app.tuchong.R;
-import info.lofei.app.tuchong.activity.MainActivity;
+import info.lofei.app.tuchong.activity.LoginActivity;
 import info.lofei.app.tuchong.adapter.CategoryAdapter;
+import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.data.request.GetCategoryPosts;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.utils.Constant;
@@ -45,20 +48,18 @@ public class CategoryFragment extends BaseFragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.fab)
-    FloatingActionButton mFloatingActionButton;
-
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     //#endregion
 
-    private MainActivity mMainActivity;
+    private Activity mMainActivity;
 
     private CategoryAdapter mAdapter;
 
     private List<TCPost> mTCPostList;
 
     private String mCategory;
+    private boolean isLoadFinished;
 
     public static CategoryFragment newInstance(String category) {
         CategoryFragment fragment = new CategoryFragment();
@@ -73,24 +74,26 @@ public class CategoryFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
+    private View view;
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
 
-        setupFloatActionButton();
-        setupRecyclerView();
-        setupSwipeRefreshLayout();
+        if(view == null){
+            view = inflater.inflate(R.layout.fragment_main, container, false);
+            ButterKnife.bind(this, view);
 
-        setupData();
+            setupRecyclerView();
+            setupSwipeRefreshLayout();
 
+            setupData();
+        }
         return view;
     }
 
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        mMainActivity = (MainActivity) activity;
+        mMainActivity = activity;
     }
 
     @Override
@@ -106,14 +109,19 @@ public class CategoryFragment extends BaseFragment {
             mAdapter = new CategoryAdapter(mMainActivity);
         }
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void setupFloatActionButton() {
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutmanger = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutmanger.getItemCount() - layoutmanger.findLastCompletelyVisibleItemPosition() <= Constant.PAGE_COUNT / 2 && !isLoadFinished) {
+                    loadData(false);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
         });
     }
@@ -146,10 +154,20 @@ public class CategoryFragment extends BaseFragment {
 
     private void loadData(final boolean isRefresh) {
         if (isRefresh) {
+            isLoadFinished = false;
             mSwipeRefreshLayout.setRefreshing(true);
             mTCPostList.clear();
         }
-        String url = String.format(TuChongApi.CATEGORY_URL, mCategory, isRefresh ? "last" : "next", Constant.PAGE_COUNT);
+
+        String categoryEncode = null;
+        try {
+            categoryEncode = URLEncoder.encode(mCategory, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = String.format(TuChongApi.CATEGORY_URL, categoryEncode , isRefresh ? "last" : "next", Constant.PAGE_COUNT);
+
         executeRequest(new GetCategoryPosts(url, new Response.Listener<List<TCPost>>() {
             @Override
             public void onResponse(final List<TCPost> response) {
@@ -158,6 +176,9 @@ public class CategoryFragment extends BaseFragment {
                     mAdapter.notifyDataSetChanged();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
+                if(response == null || response.isEmpty()){
+                    isLoadFinished = true;
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -165,7 +186,9 @@ public class CategoryFragment extends BaseFragment {
                 if (!isDetached()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                     if (error instanceof AuthFailureError) {
-                        mMainActivity.loginRequired();
+                        RequestManager.cancelAll(this);
+                        AppManager.getInstance().finishAllActivities();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
                 }
             }

@@ -7,16 +7,11 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.transition.ChangeBounds;
-import android.transition.Slide;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +20,8 @@ import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +32,6 @@ import info.lofei.app.tuchong.data.RequestManager;
 import info.lofei.app.tuchong.data.request.GetSiteRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
 import info.lofei.app.tuchong.fragment.CategoryFragment;
-import info.lofei.app.tuchong.fragment.DetailFragment;
 import info.lofei.app.tuchong.fragment.MainFragment;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
@@ -77,6 +73,11 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        UmengUpdateAgent.update(this);
+
+        FeedbackAgent agent = new FeedbackAgent(this);
+        agent.sync();
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -100,7 +101,7 @@ public class MainActivity extends BaseActivity {
 
         executeRequest(new GetSiteRequest(url, new Response.Listener<TCSite>() {
             @Override
-            public void onResponse(TCSite site) {
+            public void onResponse(final TCSite site) {
                 if (site != null) {
                     RequestManager.loadImage(site.getIcon(),
                             RequestManager.getImageListener(profileImageView, null, null));
@@ -108,6 +109,13 @@ public class MainActivity extends BaseActivity {
                     mFollower.setText(getString(R.string.str_drawer_follower, site.getFollowers()));
                     mFollowing.setText(getString(R.string.str_drawer_following, NumberUtil.toInt(site.getFollowing())));
                     mDescription.setText(site.getDescription());
+                    profileImageView.setOnClickListener(new View.OnClickListener(){
+
+                        @Override
+                        public void onClick(View v) {
+                            WebViewActivity.launch(v.getContext(), site.getUrl());
+                        }
+                    });
                 }
             }
         }, new Response.ErrorListener() {
@@ -157,11 +165,6 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -194,20 +197,23 @@ public class MainActivity extends BaseActivity {
                                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                                 break;
                             default:
-                                String category = menuItem.getTitle().toString();
-                                if (mCategoryFragment == null || !mCategoryFragment.isVisible()) {
-                                    mCategoryFragment = CategoryFragment.newInstance(category);
-                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.fragment_container, mCategoryFragment).commitAllowingStateLoss();
-                                } else {
-                                    mCategoryFragment.setCategory(category);
-                                }
+                                showCategoryFragment(menuItem.getTitle().toString());
 
                                 break;
                         }
                         return true;
                     }
                 });
+    }
+
+    public void showCategoryFragment(String category) {
+        if (mCategoryFragment == null || !mCategoryFragment.isVisible()) {
+            mCategoryFragment = CategoryFragment.newInstance(category);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, mCategoryFragment).commitAllowingStateLoss();
+        } else {
+            mCategoryFragment.setCategory(category);
+        }
     }
 
     public void launchMainFragment() {
@@ -217,35 +223,36 @@ public class MainActivity extends BaseActivity {
 
     public void loginRequired() {
         RequestManager.cancelAll(this);
-        AppManager.getInstance().finishAllActivitis();
-        startActivity(new Intent(this, LoginActivity.class));
+        AppManager.getInstance().finishAllActivities();
+        startActivity(new Intent(this, RegLoginActivity.class));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void launchDetailFragment(final TCPost tcPost, final View view) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        DetailFragment fragment = DetailFragment.newInstance(tcPost);
+        PostDetailActivity.launch(this, tcPost);
+        //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        //PostDetailFragment fragment = PostDetailFragment.newInstance(tcPost);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide slide = new Slide(Gravity.BOTTOM);
-            slide.setDuration(200);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Slide slide = new Slide(Gravity.BOTTOM);
+//            slide.setDuration(200);
+//
+//            ChangeBounds changeBounds = new ChangeBounds();
+//            changeBounds.setDuration(200);
+//
+//            fragment.setEnterTransition(slide);
+//            fragment.setAllowEnterTransitionOverlap(true);
+//            fragment.setAllowReturnTransitionOverlap(true);
+//            fragment.setSharedElementEnterTransition(changeBounds);
+//            String transitionName = getString(R.string.transition_image);
+//            Log.d("test", transitionName);
+////            view.setTransitionName(transitionName);
+////            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
+////            fragmentTransaction.addSharedElement(view, transitionName);
+////            supportPostponeEnterTransition();
+//        }
 
-            ChangeBounds changeBounds = new ChangeBounds();
-            changeBounds.setDuration(200);
-
-            fragment.setEnterTransition(slide);
-            fragment.setAllowEnterTransitionOverlap(true);
-            fragment.setAllowReturnTransitionOverlap(true);
-            fragment.setSharedElementEnterTransition(changeBounds);
-            String transitionName = getString(R.string.transition_image);
-            Log.d("test", transitionName);
-//            view.setTransitionName(transitionName);
-//            ViewCompat.setTransitionName(view, getString(R.string.transition_image));
-//            fragmentTransaction.addSharedElement(view, transitionName);
-//            supportPostponeEnterTransition();
-        }
-
-        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(DetailFragment.class.getSimpleName()).commitAllowingStateLoss();
+        //fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack(PostDetailFragment.class.getSimpleName()).commitAllowingStateLoss();
 //        mActionBarDrawerToggle.onDrawerSlide(null, 0.5f);
 //        getSupportFragmentManager().executePendingTransactions();
     }

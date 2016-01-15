@@ -9,28 +9,28 @@ import java.util.Stack;
  */
 public class AppManager {
 
-    private final static AppManager mAppmanager = new AppManager();
+    private final static AppManager mAppManager = new AppManager();
 
-    private AppManager(){
+    private AppManager() {
         mActivities = new Stack<>();
     }
 
-    public static AppManager getInstance(){
-        return mAppmanager;
+    public static AppManager getInstance() {
+        return mAppManager;
     }
 
     private Stack<Activity> mActivities;
 
-    public void add(Activity activity){
+    public void add(Activity activity) {
         mActivities.add(activity);
     }
 
-    public void remove(Activity activity){
+    public void remove(Activity activity) {
         mActivities.remove(activity);
     }
 
-    public void finishAllActivitis(){
-        for(Activity activity: mActivities){
+    public void finishAllActivities() {
+        for (Activity activity : mActivities) {
             activity.finish();
         }
     }

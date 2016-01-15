@@ -50,6 +50,14 @@
             android:textSize="12sp"
             android:textAppearance="?attr/textAppearanceListItemSmall" />
 
+        <ImageView android:id="@+id/the_comment_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="#eee"
+            android:scaleType="centerCrop"
+            android:padding="1dp"
+            />
+
     </LinearLayout>
 
 </LinearLayout>

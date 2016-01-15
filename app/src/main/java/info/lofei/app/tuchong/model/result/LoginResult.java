@@ -9,6 +9,8 @@ public class LoginResult {
     public static final int CODE_SUCCESS = 0;
     public static final int CODE_PWD_OR_NAME_ERROR = 4;
     public static final int CODE_VIDIFY_ERROR = 5;
+    public static final int CODE_USER_NOT_EXIST = 2;
+    public static final int CODE_NEED_PARMS = 7;
     public static final int CODE_NEED_CAPTCHA = 11;
 
     /*

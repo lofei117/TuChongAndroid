@@ -1,10 +1,14 @@
 package info.lofei.app.tuchong.data;
 
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.net.http.AndroidHttpClient;
 import android.widget.ImageView;
 
 import com.android.volley.Cache;
@@ -14,9 +18,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 
 import java.io.File;
 import java.net.CookieHandler;
@@ -51,6 +57,19 @@ public class RequestManager {
         requestQueue.start();
         CookieManager manager = new CookieManager(new SimpleCookieStore(), CookiePolicy.ACCEPT_ORIGINAL_SERVER);
         CookieHandler.setDefault(manager);
+
+//        String userAgent = "volley/0";
+//        try {
+//            String packageName = BaseApplication.getBaseApplication().getPackageName();
+//            PackageInfo info = BaseApplication.getBaseApplication().getPackageManager().getPackageInfo(packageName, 0);
+//            userAgent = packageName + "/" + info.versionCode;
+//        } catch (PackageManager.NameNotFoundException e) {}
+//        android.net.http.AndroidHttpClient  httpClient = AndroidHttpClient.newInstance(userAgent);
+//        HttpStack httpStack = new OwnHttpClientStack(httpClient);
+//        RequestQueue requestQueue = Volley.newRequestQueue(BaseApplication.getBaseApplication(),
+//                httpStack);
+
+
         return requestQueue;
     }
 

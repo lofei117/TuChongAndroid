@@ -13,7 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import info.lofei.app.tuchong.data.request.result.CommentResult;
-import info.lofei.app.tuchong.data.request.result.LoginResult;
 
 /**
  * Created by JunyiZhou on 2015/11/23.
