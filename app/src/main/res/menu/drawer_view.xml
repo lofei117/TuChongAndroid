@@ -20,32 +20,10 @@
         <item
             android:id="@+id/nav_activity"
             android:icon="@drawable/ic_dashboard"
-            android:title="@string/category_activity"/>
+            android:title="Home"/>
         <item
-            android:id="@+id/nav_portrait"
+            android:id="@+id/nav_setting"
             android:icon="@drawable/ic_event"
-            android:title="@string/category_portrait"/>
-        <item
-            android:id="@+id/nav_humanities"
-            android:icon="@drawable/ic_headset"
-            android:title="@string/category_humanities"/>
-        <item
-            android:id="@+id/nav_scenery"
-            android:icon="@drawable/ic_forum"
-            android:title="@string/category_scenery"/>
-        <item
-            android:id="@+id/nav_documentary"
-            android:icon="@drawable/ic_forum"
-            android:title="@string/category_documentary"/>
-        <item
-            android:id="@+id/nav_still_life"
-            android:icon="@drawable/ic_forum"
-            android:title="@string/category_still_life"/>
-        <item
-            android:id="@+id/nav_journey"
-            android:icon="@drawable/ic_forum"
-            android:title="@string/category_journey"/>
+            android:title="Setting"/>
     </group>
-
-
 </menu>

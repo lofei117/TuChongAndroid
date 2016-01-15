@@ -190,6 +190,9 @@ public class MainActivity extends BaseActivity {
                                 }
                                 launchMainFragment();
                                 break;
+                            case R.id.nav_setting:
+                                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                                break;
                             default:
                                 String category = menuItem.getTitle().toString();
                                 if (mCategoryFragment == null || !mCategoryFragment.isVisible()) {
