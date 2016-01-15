@@ -47,12 +47,6 @@ public class TCPost implements Serializable {
 
     private List<TCImage> images;
 
-    private List<String> tags;
-
-    private TCAuthor author;
-
-    private TCSite site;
-
     private boolean is_favorite;
 
     public long getPost_id() {
@@ -151,14 +145,6 @@ public class TCPost implements Serializable {
         this.images = images;
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
     public boolean is_favorite() {
         return is_favorite;
     }
@@ -167,19 +153,22 @@ public class TCPost implements Serializable {
         this.is_favorite = is_favorite;
     }
 
-    public TCAuthor getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(TCAuthor author) {
-        this.author = author;
-    }
-
-    public TCSite getSite() {
-        return site;
-    }
-
-    public void setSite(TCSite site) {
-        this.site = site;
+    @Override
+    public String toString() {
+        return "TCPost{" +
+                "post_id=" + post_id +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", site_id=" + site_id +
+                ", author_id=" + author_id +
+                ", published_at='" + published_at + '\'' +
+                ", excerpt='" + excerpt + '\'' +
+                ", favorites=" + favorites +
+                ", comments=" + comments +
+                ", title='" + title + '\'' +
+                ", image_count=" + image_count +
+                ", images=" + images +
+                ", is_favorite=" + is_favorite +
+                '}';
     }
 }

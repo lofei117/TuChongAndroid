@@ -24,10 +24,11 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import info.lofei.app.tuchong.BaseApplication;
 import info.lofei.app.tuchong.R;
+import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.data.request.CaptchaRequest;
 import info.lofei.app.tuchong.data.request.LoginRequest;
-import info.lofei.app.tuchong.data.request.result.Captcha;
-import info.lofei.app.tuchong.data.request.result.LoginResult;
+import info.lofei.app.tuchong.model.result.Captcha;
+import info.lofei.app.tuchong.model.result.LoginResult;
 import info.lofei.app.tuchong.utils.RSA;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -63,7 +64,7 @@ public class LoginFragment extends BaseFragment {
 
     private Captcha mGetCaptcha;
 
-    //private MainActivity mMainActivity;
+    private MainActivity mMainActivity;
 
     public static LoginFragment newInstance() {
         return new LoginFragment();
@@ -72,18 +73,18 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        //mMainActivity = (MainActivity) activity;
+        mMainActivity = (MainActivity) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //mMainActivity = null;
+        mMainActivity = null;
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -117,9 +118,9 @@ public class LoginFragment extends BaseFragment {
 
                 switch (response.getCode()) {
                     case LoginResult.CODE_SUCCESS:
-//                        if (mMainActivity != null) {
-//                            mMainActivity.launchMainFragment();
-//                        }
+                        if (mMainActivity != null) {
+                            mMainActivity.launchMainFragment();
+                        }
                         break;
                     case LoginResult.CODE_PWD_OR_NAME_ERROR:
 

@@ -4,33 +4,27 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
-import butterknife.OnClick;
 import info.lofei.app.tuchong.R;
 import info.lofei.app.tuchong.activity.MainActivity;
 import info.lofei.app.tuchong.adapter.DetailAdapter;
 import info.lofei.app.tuchong.data.request.GetComments;
-import info.lofei.app.tuchong.data.request.LoginRequest;
-import info.lofei.app.tuchong.data.request.PostCommentRequest;
-import info.lofei.app.tuchong.data.request.result.CommentResult;
+import info.lofei.app.tuchong.data.request.GetExif;
 import info.lofei.app.tuchong.model.TCComment;
+import info.lofei.app.tuchong.model.TCExif;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
@@ -43,6 +37,7 @@ import info.lofei.app.tuchong.vendor.TuChongApi;
  */
 public class DetailFragment extends BaseFragment {
 
+    private static final String TAG = DetailFragment.class.getSimpleName();
     private static String BUNDLE_ARG_POST = "bundle_arg_post";
 
     @Bind(R.id.recyclerView)
@@ -55,9 +50,6 @@ public class DetailFragment extends BaseFragment {
     private DetailAdapter mAdapter;
 
     private MainActivity mMainActivity;
-
-    @Bind(R.id.et_comment_content)
-    EditText commentEditer;
 
     public static DetailFragment newInstance(TCPost post) {
         DetailFragment detailFragment = new DetailFragment();
@@ -105,7 +97,25 @@ public class DetailFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
         if(mAdapter == null) {
             mAdapter = new DetailAdapter(mMainActivity, mTCPost);
-            mAdapter.fillCommentsData(mCommentList);
+            mAdapter.fillData(mCommentList);
+            mAdapter.setOnImageLongClickListener(new DetailAdapter.OnImageLongClickListener() {
+                @Override
+                public boolean onLongClick(View view, long imageId, long postId) {
+                    executeRequest(new GetExif(imageId, postId, new Response.Listener<TCExif>() {
+                        @Override
+                        public void onResponse(TCExif response) {
+                            Log.d(TAG, response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO
+                            Toast.makeText(mMainActivity, "null exif", Toast.LENGTH_SHORT).show();
+                        }
+                    }));
+                    return true;
+                }
+            });
         }
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -130,30 +140,6 @@ public class DetailFragment extends BaseFragment {
             @Override
             public void onErrorResponse(final VolleyError error) {
 
-            }
-        }));
-    }
-
-    @OnClick(R.id.btn_add_comment)
-    void sendComment() {
-        HashMap<String, String> params = new HashMap<>(8);
-        params.put("post_id", String.valueOf(mTCPost.getPost_id()));
-        params.put("content", commentEditer.getText().toString());
-
-        executeRequest(new PostCommentRequest(Request.Method.POST, String.format(TuChongApi.REPLY_URL, mTCPost.getPost_id()), params, new Response.Listener<CommentResult>() {
-            @Override
-            public void onResponse(CommentResult response) {
-                if (response == null) {
-                    return;
-                }
-                Toast.makeText(getActivity(), response.getResult(), Toast.LENGTH_SHORT).show();
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
             }
         }));
     }

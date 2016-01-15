@@ -130,4 +130,17 @@ public class TCSite implements Serializable {
     public void setIcon(final String icon) {
         this.icon = icon;
     }
+
+    @Override
+    public String toString() {
+        return "TCSite{" +
+                "site_id=" + site_id +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", domain='" + domain + '\'' +
+                ", followers=" + followers +
+                ", url='" + url + '\'' +
+                ", icon='" + icon + '\'' +
+                '}';
+    }
 }
