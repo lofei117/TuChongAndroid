@@ -40,6 +40,19 @@ public class WebRequest extends BaseRequest<String> {
                     group = group.substring(20, group.length() -1);
                 }
             }
+
+            if(TextUtils.isEmpty(group)){
+                Pattern pattern2 =  Pattern.compile("nonce = '[A-Za-z0-9]{16}'");
+                Matcher matcher2 = pattern2.matcher(json);
+                //nonce = '6cc0a3519df37770'
+                if(matcher2.find()){
+                    group = matcher2.group();
+                    if(!TextUtils.isEmpty(group)){
+                        group = group.substring(8, group.length() -1);
+                    }
+                }
+            }
+
             //name="nonce" value="[A-Za-z0-9]{16}"
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

@@ -39,6 +39,7 @@ import info.lofei.app.tuchong.model.TCComment;
 import info.lofei.app.tuchong.model.TCImage;
 import info.lofei.app.tuchong.model.TCPost;
 import info.lofei.app.tuchong.model.TCSite;
+import info.lofei.app.tuchong.utils.NumberUtil;
 import info.lofei.app.tuchong.vendor.TuChongApi;
 
 /**
@@ -257,7 +258,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
                     @Override
                     public void onClick(View v) {
-                        AuthorShowActivity.laucher(v.getContext(), author);
+                        AuthorShowActivity.launch(v.getContext(), String.valueOf(author.getSiteId()));
                     }
                 });
                 postAuthorName.setText(author.getName());
@@ -274,7 +275,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.BaseViewHo
 
                     @Override
                     public void onClick(View v) {
-                        AuthorShowActivity.laucher(v.getContext(), site);
+                        AuthorShowActivity.launch(v.getContext(), String.valueOf(site.getSite_id()));
                     }
                 });
             }

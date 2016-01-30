@@ -12,7 +12,6 @@ import java.io.Serializable;
  *          created at: 2015-07-17 14:23
  */
 public class TCAuthor implements Serializable {
-
     @SerializedName("site_id")
     private long siteId;
 

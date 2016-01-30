@@ -53,6 +53,8 @@ public class TuChongApi {
     public static final String EXIF_URL = V1_BASE_URL + "post/get-post/?img_id=%1$d&post_id=%2$d";
 
     public static final String FAVORITE_POST_URL =  BASE_URL + "users/self/favorites/%1$d";
+
+    public static final String FOLLOWING_SITE_URL =  BASE_URL + "users/self/following/%1$s";
     //endregion
 
     //region photo url

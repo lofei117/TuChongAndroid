@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TuChong</string>
+    <string name="app_name">墨道</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="action_example">Example action</string>
@@ -57,6 +57,7 @@
     <string name="item_feedback">建议反馈</string>
     <string name="enter_home_page">进入主页</string>
     <string name="homepage_follow">关注</string>
+    <string name="homepage_cancel_follow">取消关注</string>
     <string name="author_info_follow_count">%d关注者</string>
     <string name="register_mode_phone">用手机注册</string>
     <string name="register_mode_email">用邮箱注册</string>

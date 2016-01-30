@@ -59,6 +59,8 @@ public class TCSite implements Serializable {
      */
     private String icon;
 
+    private boolean isFollowing;
+
     public int getSite_id() {
         return site_id;
     }
@@ -129,6 +131,14 @@ public class TCSite implements Serializable {
 
     public void setIcon(final String icon) {
         this.icon = icon;
+    }
+
+    public boolean isFollowing() {
+        return isFollowing;
+    }
+
+    public void setIsFollowing(boolean isFollowing) {
+        this.isFollowing = isFollowing;
     }
 
     @Override
